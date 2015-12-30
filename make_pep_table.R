@@ -1,5 +1,5 @@
 
-make_pep_table <- function(msf_file, min_conf = 3) {
+make_pep_table <- function(msf_file, min_conf = "High") {
   
   confidence <- switch(min_conf,
                        High = 3,
@@ -32,6 +32,22 @@ make_pep_table <- function(msf_file, min_conf = 3) {
     summarize(SpectrumID = unique(SpectrumID), 
               Sequence = unique(Sequence), 
               Proteins = paste(Proteins, collapse = "; "))
+  
+  # Append custom fields
+  CustomFields <- tbl(my_db, "CustomDataFields")
+  
+  # Grab custom peptide data using SQL because of automatic sqlite typing
+  # This assumes that FieldValue will always be a number
+  CustomPeptides <- tbl(my_db, sql("SELECT FieldID, PeptideID, CAST(FieldValue as REAL) AS FieldValue FROM CustomDataPeptides"))
+  
+  # Spread custom fields as separate columns
+  custom_data <- left_join(CustomPeptides, CustomFields) %>%
+    select(PeptideID, DisplayName, FieldValue) %>%
+    collect() %>%
+    spread(DisplayName, FieldValue)
+  
+  # Join to peptide table
+  pep_table <- left_join(pep_table, custom_data)
   
   return(pep_table)
 
