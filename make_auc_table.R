@@ -14,7 +14,7 @@ make_auc_table <- function(msf_file, min_conf = "High", as_df = TRUE) {
   
   # Here is where all the scan information, including mass and charge
   SpectrumHeaders <- tbl(my_db, "SpectrumHeaders") %>%
-    select(SpectrumID, FirstScan, Mass, Charge, RetentionTime) %>%
+    select(SpectrumID, FirstScan, Mass, Charge, RetentionTime, UniqueSpectrumID) %>%
     collect()
   
   # Grab intensities
@@ -23,6 +23,9 @@ make_auc_table <- function(msf_file, min_conf = "High", as_df = TRUE) {
     collect()
   
   # Here are all the areas
+  # m/z is really just one of many m/z's that could be retrieved from the msf file.
+  # All of the m/z's are calculated slightly differently. I just picked one since
+  # I don't use m/z's for my work.
   events_joined <- inner_join(Events, EventAreaAnnotations) %>% 
     inner_join(PrecursorIonAreaSearchSpectra) %>%
     collect()  %>%
@@ -31,8 +34,10 @@ make_auc_table <- function(msf_file, min_conf = "High", as_df = TRUE) {
   # NOTE: mass and m/z are probably not correct right now! I have check them in more detail
   
   # Join areas to the spectrum IDs. Not all spectrum IDs have areas!
+  # I haven't figured out what the difference between UniqueSpectrumID and SpectrumID are,
+  # except that MassPeakID's correspond to UniqueSpectrumID ONLY.
   spectra <- left_join(SpectrumHeaders, events_joined, by = c("SpectrumID" = "SearchSpectrumID")) %>%
-    inner_join(MassPeaks, by = c("SpectrumID" = "MassPeakID"))
+    inner_join(MassPeaks, by = c("UniqueSpectrumID" = "MassPeakID"))
   
   pep_table <- make_pep_table(msf_file, min_conf)
   
@@ -46,7 +51,23 @@ make_auc_table <- function(msf_file, min_conf = "High", as_df = TRUE) {
            m_z, 
            Charge, 
            Intensity, 
-           FirstScan)
+           FirstScan,
+           SpectrumID)
+  
+  # Combine all entries for each PeptideID
+  # Most of this process was inferred by carefully comparing output between this script and 
+  # a raw .txt file produced by Thermo software.
+  
+  auc_table %>%
+    group_by(PeptideID) %>%
+    summarize(Sequence = unique(Sequence),
+              PrecursorArea = sum(Area), # Sum all of the areas
+              m_z = mean(m_z), # Average m/z ratios
+              Mass = mean(Mass), # Average masses
+              Intensity = unique(Intensity), # All intensities should be the same
+              Charge = unique(Charge), # Charges should all be the same
+              FirstScan = unique(FirstScan), # FirstScan should all be the same
+              Proteins = unique(Proteins)) -> auc_table
   
   return(auc_table)
   
