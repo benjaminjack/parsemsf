@@ -29,7 +29,8 @@ make_auc_table <- function(msf_file, min_conf = "High", as_df = TRUE) {
   events_joined <- inner_join(Events, EventAreaAnnotations) %>% 
     inner_join(PrecursorIonAreaSearchSpectra) %>%
     collect()  %>%
-    rename(m_z = Mass)
+    group_by(SearchSpectrumID) %>%
+    summarize(Area = sum(Area), m_z = mean(Mass))
   
   # NOTE: mass and m/z are probably not correct right now! I have check them in more detail
   
@@ -53,21 +54,6 @@ make_auc_table <- function(msf_file, min_conf = "High", as_df = TRUE) {
            Intensity, 
            FirstScan,
            SpectrumID)
-  
-  # Combine all entries for each PeptideID
-  # Most of this process was inferred by carefully comparing output between this script and 
-  # a raw .txt file produced by Thermo software.
-  
-  auc_table %>%
-    group_by(PeptideID) %>%
-    summarize(Sequence = unique(Sequence),
-              PrecursorArea = sum(Area), # Sum all of the areas
-              m_z = mean(m_z), # Average m/z ratios
-              Mass = mean(Mass), # Average masses
-              Intensity = unique(Intensity), # All intensities should be the same
-              Charge = unique(Charge), # Charges should all be the same
-              FirstScan = unique(FirstScan), # FirstScan should all be the same
-              Proteins = unique(Proteins)) -> auc_table
   
   return(auc_table)
   
