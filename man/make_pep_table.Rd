@@ -2,16 +2,18 @@
 % Please edit documentation in R/make_pep_table.R
 \name{make_pep_table}
 \alias{make_pep_table}
-\title{Title}
+\title{A Cat Function}
 \usage{
 make_pep_table(msf_file, min_conf = "High")
 }
 \arguments{
-\item{msf_file}{}
-
-\item{min_conf}{}
+\item{love}{Do you love cats? Defaults to TRUE.}
 }
 \description{
-Title
+This function allows you to express your love of cats.
 }
+\examples{
+cat_function()
+}
+\keyword{cats}
 

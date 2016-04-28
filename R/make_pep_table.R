@@ -1,14 +1,13 @@
-#' Title
+#' A Cat Function
 #'
-#' @param msf_file 
-#' @param min_conf 
-#'
-#' @return
+#' This function allows you to express your love of cats.
+#' @param love Do you love cats? Defaults to TRUE.
+#' @keywords cats
 #' @export
-#'
 #' @examples
-make_pep_table <-
-function(msf_file, min_conf = "High") {
+#' cat_function()
+
+make_pep_table <- function(msf_file, min_conf = "High") {
   
   confidence <- switch(min_conf,
                        High = 3,
