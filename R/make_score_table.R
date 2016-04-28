@@ -1,3 +1,12 @@
+#' Make a table of scores
+#'
+#' @param msf_file 
+#' @param min_conf 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 make_score_table <- function(msf_file, min_conf = "High") {
   
   # Access MSF database file

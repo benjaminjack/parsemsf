@@ -1,4 +1,14 @@
 
+#' Make a table of peptide areas
+#'
+#' @param msf_file 
+#' @param min_conf 
+#' @param as_df 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 make_auc_table <- function(msf_file, min_conf = "High", as_df = TRUE) {
   
   # Access MSF database file

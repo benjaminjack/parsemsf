@@ -1,12 +1,13 @@
-#' A Cat Function
-#'
-#' This function allows you to express your love of cats.
-#' @param love Do you love cats? Defaults to TRUE.
-#' @keywords cats
-#' @export
-#' @examples
-#' cat_function()
 
+#' Make a table of peptides
+#'
+#' @param msf_file 
+#' @param min_conf 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 make_pep_table <- function(msf_file, min_conf = "High") {
   
   confidence <- switch(min_conf,
