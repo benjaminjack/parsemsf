@@ -34,7 +34,7 @@ merge_top_peptides <- function(df, num_reps) {
 #' @export
 #'
 #' @examples
-combine_tech_reps <- function(reps) {
+combine_tech_reps <- function(reps, normalize = TRUE) {
   
   # A list to hold dataframes
   reps_df <- list()
@@ -49,9 +49,20 @@ combine_tech_reps <- function(reps) {
   # How many technical replicates do we have?
   num_reps <- length(reps_df)
   
-  combined %>%
-    group_by(Proteins) %>%
-    do(merge_top_peptides(., num_reps)) -> combined
+  # Check if we should normalize to total area for a given replicate
+  # This accounts for any variability in how the sample was injected
+  if (normalize == TRUE) {
+    combined %>%
+      group_by(tech_rep) %>%
+      mutate(total_area = sum(Area, na.rm = TRUE), Area = Area/total_area) %>%
+      ungroup() %>%
+      group_by(Proteins) %>%
+      do(merge_top_peptides(., num_reps)) -> combined
+  } else {
+    combined %>%
+      group_by(Proteins) %>%
+      do(merge_top_peptides(., num_reps)) -> combined
+  }
   
   return(combined)
   
