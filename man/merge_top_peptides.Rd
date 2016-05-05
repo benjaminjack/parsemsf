@@ -4,7 +4,7 @@
 \alias{merge_top_peptides}
 \title{Average top three peptides from multiple replicates}
 \usage{
-merge_top_peptides(df)
+merge_top_peptides(df, num_reps)
 }
 \arguments{
 \item{df}{}

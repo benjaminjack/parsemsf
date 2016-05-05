@@ -6,7 +6,7 @@
 #' @export
 #'
 #' @examples
-merge_top_peptides <- function(df) {
+merge_top_peptides <- function(df, num_reps) {
   
   df %>%
     group_by(tech_rep, Sequence) %>%
@@ -17,7 +17,7 @@ merge_top_peptides <- function(df) {
     group_by(Sequence) %>%
     mutate(n = n()) %>% # Count number of matched peptides
     ungroup() %>%
-    filter(n >= 2) %>% # Remove any unmatched peptides
+    filter(n >= num_reps) %>% # Remove any unmatched peptides
     summarize(area_mean = mean(Area), # Compute mean areas from top peptides
               area_sd = sd(Area),
               matched_peps = n()) -> matched_areas
@@ -41,9 +41,12 @@ combine_tech_reps <- function(rep1, rep2) {
   
   combined <- bind_rows(rep1, rep2)
   
+  # How many technical replicates do we have?
+  num_reps <- 2
+  
   combined %>%
     group_by(Proteins) %>%
-    do(merge_top_peptides(.)) -> combined
+    do(merge_top_peptides(., num_reps)) -> combined
   
   return(combined)
   
