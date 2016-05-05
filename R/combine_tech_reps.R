@@ -34,15 +34,20 @@ merge_top_peptides <- function(df, num_reps) {
 #' @export
 #'
 #' @examples
-combine_tech_reps <- function(rep1, rep2) {
+combine_tech_reps <- function(reps) {
   
-  rep1 <- make_auc_table(rep1) %>% mutate(tech_rep = "A")
-  rep2 <- make_auc_table(rep2) %>% mutate(tech_rep = "B")
+  # A list to hold dataframes
+  reps_df <- list()
   
-  combined <- bind_rows(rep1, rep2)
+  # Add an ID number for technical replicates
+  for (i in 1:length(reps)) {
+    reps_df[[i]] <- make_auc_table(reps[[i]]) %>% mutate(tech_rep = i)
+  }
+  
+  combined <- bind_rows(reps_df)
   
   # How many technical replicates do we have?
-  num_reps <- 2
+  num_reps <- length(reps_df)
   
   combined %>%
     group_by(Proteins) %>%
