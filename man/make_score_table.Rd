@@ -2,16 +2,22 @@
 % Please edit documentation in R/make_score_table.R
 \name{make_score_table}
 \alias{make_score_table}
-\title{Make a table of scores}
+\title{Make a data frame of peptide scores}
 \usage{
 make_score_table(msf_file, min_conf = "High")
 }
 \arguments{
-\item{msf_file}{}
+\item{msf_file}{A file path to a thermo MSF file.}
 
-\item{min_conf}{}
+\item{min_conf}{"High", "Medium", or "Low". The mininum peptide confidence level to retrieve from MSF file.}
+}
+\value{
+A data frame containing PEP and Q-value for peptides in an MSF file.
 }
 \description{
-Make a table of scores
+Makes a data frame containing scores (PEP, Q-value) for each peptides in a thermo MSF file.
+}
+\examples{
+make_score_table("mythermofile.msf")
 }
 
