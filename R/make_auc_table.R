@@ -36,8 +36,8 @@ make_auc_table <- function(msf_file, min_conf = "High", as_df = TRUE) {
   # m/z is really just one of many m/z's that could be retrieved from the msf file.
   # All of the m/z's are calculated slightly differently. I just picked one since
   # I don't use m/z's for my work.
-  events_joined <- inner_join(Events, EventAreaAnnotations) %>% 
-    inner_join(PrecursorIonAreaSearchSpectra) %>%
+  events_joined <- inner_join(Events, EventAreaAnnotations, by = "EventID") %>% 
+    inner_join(PrecursorIonAreaSearchSpectra, by = "QuanResultID") %>%
     collect()  %>%
     group_by(SearchSpectrumID) %>%
     summarize(Area = sum(Area), m_z = mean(Mass))

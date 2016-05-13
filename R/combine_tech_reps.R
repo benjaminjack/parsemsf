@@ -45,45 +45,38 @@ combine_tech_reps <- function(reps, normalize = TRUE, match_peps = TRUE, relabel
   # A list to hold dataframes
   reps_df <- list()
   
+  # How many technical replicates do we have?
+  num_reps <- length(reps)
+  
   # Add an ID number for technical replicates
   for (i in 1:length(reps)) {
+    message(paste("Now processing: ", reps[[i]]))
     reps_df[[i]] <- make_auc_table(reps[[i]]) %>% 
       mutate(tech_rep = i)
   }
   
+  # Combine into single dataframe with all technical replicates
   combined <- bind_rows(reps_df)
-  
-  # Rename some protein groups
-  # This should probably not be hard-coded but I haven't come up with a smart way to do it automatically
-  # bind_rows(reps_df) %>%
-  #   mutate(Proteins = str_replace(Proteins, 'NP_041997.1; NP_041998.1', 'NP_041998.1')) %>%
-  #   mutate(Proteins = str_replace(Proteins, 'NP_041975.1; NP_041977.1', 'NP_041975.1')) %>%
-  #   mutate(Proteins = str_replace(Proteins, 'NP_041997.1', 'NP_041998.1')) %>%
-  #   mutate(Proteins = str_replace(Proteins, 'NP_041977.1', 'NP_041975.1')) -> combined
-  #   
   
   # Rename some protein groups
   if (relabel != FALSE) {
     combined %<>% mutate(Proteins = str_replace_all(Proteins, relabel))
   }
   
-  # How many technical replicates do we have?
-  num_reps <- length(reps_df)
-  
   # Check if we should normalize to total area for a given replicate
   # This accounts for any variability in how the sample was injected
+  message("Quantitating...")
   if (normalize == TRUE) {
-    combined %>%
+    combined %<>%
       group_by(tech_rep) %>%
       mutate(total_area = sum(Area, na.rm = TRUE), Area = Area/total_area) %>%
-      ungroup() %>%
-      group_by(Proteins) %>%
-      do(merge_top_peptides(., num_reps, match_peps = match_peps)) -> combined
-  } else {
-    combined %>%
-      group_by(Proteins) %>%
-      do(merge_top_peptides(., num_reps, match_peps = match_peps)) -> combined
-  }
+      ungroup()
+  } 
+  
+  # Quantitate using top three most abundant areas
+  combined %<>%
+    group_by(Proteins) %>%
+    do(merge_top_peptides(., num_reps, match_peps = match_peps))
   
   return(combined)
   

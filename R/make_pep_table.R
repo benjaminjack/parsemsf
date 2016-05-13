@@ -34,7 +34,7 @@ make_pep_table <- function(msf_file, min_conf = "High") {
   
   # Build a peptide table
   pep_table <- inner_join(PeptidesProteins, Peptides, by = c("PeptideID" = "PeptideID")) %>% 
-    inner_join(ProteinAnnotations) %>%
+    inner_join(ProteinAnnotations, by = "ProteinID") %>%
     collect() %>%
     mutate(Proteins = str_match(Description, "^>([a-zA-Z0-9._]+)\\b")[,2]) %>%
     group_by(PeptideID) %>%
@@ -50,13 +50,13 @@ make_pep_table <- function(msf_file, min_conf = "High") {
   CustomPeptides <- tbl(my_db, sql("SELECT FieldID, PeptideID, CAST(FieldValue as REAL) AS FieldValue FROM CustomDataPeptides"))
   
   # Spread custom fields as separate columns
-  custom_data <- left_join(CustomPeptides, CustomFields) %>%
+  custom_data <- left_join(CustomPeptides, CustomFields, by = "FieldID") %>%
     select(PeptideID, DisplayName, FieldValue) %>%
     collect() %>%
     spread(DisplayName, FieldValue)
   
   # Join to peptide table
-  pep_table <- left_join(pep_table, custom_data)
+  pep_table <- left_join(pep_table, custom_data, by = "PeptideID")
   
   return(pep_table)
 
