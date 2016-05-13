@@ -4,16 +4,20 @@
 \alias{make_auc_table}
 \title{Make a table of peptide areas}
 \usage{
-make_auc_table(msf_file, min_conf = "High", as_df = TRUE)
+make_auc_table(msf_file, min_conf = "High")
 }
 \arguments{
-\item{msf_file}{}
+\item{msf_file}{A file path to a thermo MSF file.}
 
-\item{min_conf}{}
-
-\item{as_df}{}
+\item{min_conf}{"High", "Medium", or "Low". The mininum peptide confidence level to retrieve from MSF file.}
+}
+\value{
+A data frame containing peptide areas for peptides at or above the minimum confidence level.
 }
 \description{
 Make a table of peptide areas
+}
+\examples{
+make_auc_table("mythermofile.msf")
 }
 

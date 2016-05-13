@@ -2,16 +2,22 @@
 % Please edit documentation in R/make_pep_table.R
 \name{make_pep_table}
 \alias{make_pep_table}
-\title{Make a table of peptides}
+\title{Make a data frame of peptides from a thermo MSF file}
 \usage{
 make_pep_table(msf_file, min_conf = "High")
 }
 \arguments{
-\item{msf_file}{}
+\item{msf_file}{A file path to a thermo MSF file.}
 
-\item{min_conf}{}
+\item{min_conf}{"High", "Medium", or "Low". The mininum peptide confidence level to retrieve from MSF file.}
+}
+\value{
+A data frame of all peptides above the confidence cut-off from a thermo MSF file.
 }
 \description{
-Make a table of peptides
+Make a data frame of peptides from a thermo MSF file
+}
+\examples{
+make_pep_table("mythermofile.msf")
 }
 
