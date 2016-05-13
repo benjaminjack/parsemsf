@@ -40,7 +40,7 @@ merge_top_peptides <- function(df, num_reps, match_peps = TRUE) {
 #' @export
 #'
 #' @examples
-combine_tech_reps <- function(reps, normalize = TRUE, match_peps = TRUE) {
+combine_tech_reps <- function(reps, normalize = TRUE, match_peps = TRUE, relabel = FALSE) {
   
   # A list to hold dataframes
   reps_df <- list()
@@ -51,14 +51,21 @@ combine_tech_reps <- function(reps, normalize = TRUE, match_peps = TRUE) {
       mutate(tech_rep = i)
   }
   
+  combined <- bind_rows(reps_df)
   
   # Rename some protein groups
   # This should probably not be hard-coded but I haven't come up with a smart way to do it automatically
-  bind_rows(reps_df) %>%
-    mutate(Proteins = str_replace(Proteins, 'NP_041997.1; NP_041998.1', 'NP_041998.1')) %>%
-    mutate(Proteins = str_replace(Proteins, 'NP_041975.1; NP_041977.1', 'NP_041975.1')) %>%
-    mutate(Proteins = str_replace(Proteins, 'NP_041997.1', 'NP_041998.1')) %>%
-    mutate(Proteins = str_replace(Proteins, 'NP_041977.1', 'NP_041975.1')) -> combined
+  # bind_rows(reps_df) %>%
+  #   mutate(Proteins = str_replace(Proteins, 'NP_041997.1; NP_041998.1', 'NP_041998.1')) %>%
+  #   mutate(Proteins = str_replace(Proteins, 'NP_041975.1; NP_041977.1', 'NP_041975.1')) %>%
+  #   mutate(Proteins = str_replace(Proteins, 'NP_041997.1', 'NP_041998.1')) %>%
+  #   mutate(Proteins = str_replace(Proteins, 'NP_041977.1', 'NP_041975.1')) -> combined
+  #   
+  
+  # Rename some protein groups
+  if (relabel != FALSE) {
+    combined %<>% mutate(Proteins = str_replace_all(Proteins, relabel))
+  }
   
   # How many technical replicates do we have?
   num_reps <- length(reps_df)

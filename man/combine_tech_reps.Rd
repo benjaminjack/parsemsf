@@ -4,7 +4,8 @@
 \alias{combine_tech_reps}
 \title{Combine technical replicates using top 3 methods}
 \usage{
-combine_tech_reps(reps, normalize = TRUE, match_peps = TRUE)
+combine_tech_reps(reps, normalize = TRUE, match_peps = TRUE,
+  relabel = FALSE)
 }
 \arguments{
 \item{rep1}{}

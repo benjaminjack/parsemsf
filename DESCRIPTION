@@ -8,9 +8,10 @@ Depends:
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 5.0.1.9000
+RoxygenNote: 5.0.1
 Imports:
-  dplyr,
-  readr,
-  stringr,
-  tidyr
+    dplyr,
+    readr,
+    RSQLite,
+    stringr,
+    tidyr
