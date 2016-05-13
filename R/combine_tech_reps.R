@@ -1,11 +1,16 @@
-#' Average top three peptides from multiple replicates
+#' Average areas of top three peptides from multiple technical replicates
+#' 
+#' Takes a data frame containing peptide information for a single protein group and several technical replicates and averages the most abundant peptides (by area) across all replicates. By default, this function takes the averages across the top three peptides. This function will also optionally match peptides across replicates so only matching peptides are averaged together.
+#' 
+#' @param df A data frame generated from \code{\link{make_auc_table}} for a single protein group with the column \code{tech_rep} to indicate the technical replicate 
+#' @param num_reps numeric Number of technical replicates being combined
+#' @param match_peps boolean Should we only quantitate based on the top three peptides present in all replicates?
 #'
-#' @param df 
-#'
-#' @return
+#' @return A data frame with the columns \code{area_mean}, \code{area_sd}, \code{peps_per_tech_rep}, which corresponds to the average area, the standard deviation of the areas, and the number of peptides that were averaged together divided by the number of replicates. This dataframe corresponds to a single protein group.
 #' @export
 #'
 #' @examples
+#' merge_top_peptides(df, 2, match_peps = T)
 merge_top_peptides <- function(df, num_reps, match_peps = TRUE) {
   
   df %>%
@@ -31,15 +36,20 @@ merge_top_peptides <- function(df, num_reps, match_peps = TRUE) {
   return(matched_areas)
 }
 
-#' Combine technical replicates using top 3 methods
+#' Combine technical replicates and quantitate proteins
+#' 
+#' Takes a list of thermo MSF files, parses and combines them into a single data frame, and computes areas for each protein group based on the top 3 method of quantitation.
 #'
-#' @param rep1 
-#' @param rep2 
+#' @param reps Vector. List of thermo MSF file names
+#' @param normalize Boolean. Should we normalize peptide areas for technical replicate to the total areas in a given replicate? 
+#' @param match_peps Boolean. Should we quantitate only on matching peptides across technical replicates?
+#' @param relabel Named vector for relabeling protein groups. Names correspond to a pattern or string to match (i.e. the name or ID of a protein group), and values correspond to the new value (i.e. new protein group name).
 #'
-#' @return
+#' @return A data frame with the columns \code{area_mean}, \code{area_sd}, \code{peps_per_tech_rep}, which corresponds to the average area, the standard deviation of the areas, and the number of peptides that were averaged together divided by the number of replicates for each protein group. This dataframe contains all protein groups.
 #' @export
 #'
 #' @examples
+#' combine_tech_reps(c("rep1.msf", "rep2.msf"), relabel = c("NP_12345.1" = "NP_1000.1"))
 combine_tech_reps <- function(reps, normalize = TRUE, match_peps = TRUE, relabel = FALSE) {
   
   # A list to hold dataframes

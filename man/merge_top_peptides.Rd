@@ -2,14 +2,24 @@
 % Please edit documentation in R/combine_tech_reps.R
 \name{merge_top_peptides}
 \alias{merge_top_peptides}
-\title{Average top three peptides from multiple replicates}
+\title{Average areas of top three peptides from multiple technical replicates}
 \usage{
 merge_top_peptides(df, num_reps, match_peps = TRUE)
 }
 \arguments{
-\item{df}{}
+\item{df}{A data frame generated from \code{\link{make_auc_table}} for a single protein group with the column \code{tech_rep} to indicate the technical replicate}
+
+\item{num_reps}{numeric Number of technical replicates being combined}
+
+\item{match_peps}{boolean Should we only quantitate based on the top three peptides present in all replicates?}
+}
+\value{
+A data frame with the columns \code{area_mean}, \code{area_sd}, \code{peps_per_tech_rep}, which corresponds to the average area, the standard deviation of the areas, and the number of peptides that were averaged together divided by the number of replicates. This dataframe corresponds to a single protein group.
 }
 \description{
-Average top three peptides from multiple replicates
+Takes a data frame containing peptide information for a single protein group and several technical replicates and averages the most abundant peptides (by area) across all replicates. By default, this function takes the averages across the top three peptides. This function will also optionally match peptides across replicates so only matching peptides are averaged together.
+}
+\examples{
+merge_top_peptides(df, 2, match_peps = T)
 }
 

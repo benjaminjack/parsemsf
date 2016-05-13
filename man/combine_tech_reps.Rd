@@ -2,17 +2,27 @@
 % Please edit documentation in R/combine_tech_reps.R
 \name{combine_tech_reps}
 \alias{combine_tech_reps}
-\title{Combine technical replicates using top 3 methods}
+\title{Combine technical replicates and quantitate proteins}
 \usage{
 combine_tech_reps(reps, normalize = TRUE, match_peps = TRUE,
   relabel = FALSE)
 }
 \arguments{
-\item{rep1}{}
+\item{reps}{Vector. List of thermo MSF file names}
 
-\item{rep2}{}
+\item{normalize}{Boolean. Should we normalize peptide areas for technical replicate to the total areas in a given replicate?}
+
+\item{match_peps}{Boolean. Should we quantitate only on matching peptides across technical replicates?}
+
+\item{relabel}{Named vector for relabeling protein groups. Names correspond to a pattern or string to match (i.e. the name or ID of a protein group), and values correspond to the new value (i.e. new protein group name).}
+}
+\value{
+A data frame with the columns \code{area_mean}, \code{area_sd}, \code{peps_per_tech_rep}, which corresponds to the average area, the standard deviation of the areas, and the number of peptides that were averaged together divided by the number of replicates for each protein group. This dataframe contains all protein groups.
 }
 \description{
-Combine technical replicates using top 3 methods
+Takes a list of thermo MSF files, parses and combines them into a single data frame, and computes areas for each protein group based on the top 3 method of quantitation.
+}
+\examples{
+combine_tech_reps(c("rep1.msf", "rep2.msf"), relabel = c("NP_12345.1" = "NP_1000.1"))
 }
 
