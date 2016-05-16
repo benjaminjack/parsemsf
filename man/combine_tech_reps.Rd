@@ -5,7 +5,7 @@
 \title{Combine technical replicates and quantitate proteins}
 \usage{
 combine_tech_reps(reps, normalize = TRUE, match_peps = TRUE,
-  relabel = FALSE)
+  relabel = c())
 }
 \arguments{
 \item{reps}{Vector. List of thermo MSF file names}
