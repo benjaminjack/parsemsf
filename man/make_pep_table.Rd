@@ -4,12 +4,15 @@
 \alias{make_pep_table}
 \title{Make a data frame of peptides from a thermo MSF file}
 \usage{
-make_pep_table(msf_file, min_conf = "High")
+make_pep_table(msf_file, min_conf = "High",
+  prot_regex = "^>([a-zA-Z0-9._]+)\\\\b")
 }
 \arguments{
 \item{msf_file}{A file path to a thermo MSF file.}
 
 \item{min_conf}{"High", "Medium", or "Low". The mininum peptide confidence level to retrieve from MSF file.}
+
+\item{prot_regex}{Regular expression that extracts a protein ID from the protein description. The protein description is typically generated from a fasta reference file that was used for the database search.}
 }
 \value{
 A data frame of all peptides above the confidence cut-off from a thermo MSF file.

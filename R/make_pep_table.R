@@ -3,13 +3,14 @@
 #'
 #' @param msf_file A file path to a thermo MSF file.
 #' @param min_conf "High", "Medium", or "Low". The mininum peptide confidence level to retrieve from MSF file.
+#' @param prot_regex Regular expression that extracts a protein ID from the protein description. The protein description is typically generated from a fasta reference file that was used for the database search.
 #'
 #' @return A data frame of all peptides above the confidence cut-off from a thermo MSF file.
 #' @export
 #'
 #' @examples
 #' make_pep_table("mythermofile.msf")
-make_pep_table <- function(msf_file, min_conf = "High") {
+make_pep_table <- function(msf_file, min_conf = "High", prot_regex = "^>([a-zA-Z0-9._]+)\\b") {
 
   confidence <- switch(min_conf,
                        High = 3,
@@ -37,7 +38,8 @@ make_pep_table <- function(msf_file, min_conf = "High") {
   pep_table <- inner_join(PeptidesProteins, Peptides, by = c("PeptideID" = "PeptideID")) %>%
     inner_join(ProteinAnnotations, by = "ProteinID") %>%
     collect() %>%
-    mutate(Proteins = str_match(Description, "^>([a-zA-Z0-9._]+)\\b")[,2]) %>%
+    # Extract protein ID; assumes that protein ID is immediately after ">" and ends with a space
+    mutate(Proteins = str_match(Description, prot_regex)[,2]) %>%
     group_by(PeptideID) %>%
     summarize(SpectrumID = unique(SpectrumID),
               Sequence = unique(Sequence),
