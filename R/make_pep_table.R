@@ -3,20 +3,46 @@
 #'
 #' @param msf_file A file path to a thermo MSF file.
 #' @param min_conf "High", "Medium", or "Low". The mininum peptide confidence level to retrieve from MSF file.
-#' @param prot_regex Regular expression that extracts a protein ID from the protein description. The protein description is typically generated from a fasta reference file that was used for the database search.
+#' @param prot_regex Regular expression where the first group matches a protein name or ID from the protein description. Regex must contain ONE group. The protein description is typically generated from a fasta reference file that was used for the database search.
+#' @param collapse If TRUE, peptides that match to multiple protein sequences are collapsed into a single row with multiple protein IDs in the `Proteins` column, separated by a ";".
 #'
 #' @return A data frame of all peptides above the confidence cut-off from a thermo MSF file.
+#'
+#' \item{PeptideID}{a unique peptide ID}
+#' \item{SpectrumID}{?}
+#' \item{Sequence}{amino acid sequence (does not show post-translational modifications)}
+#' \item{Proteins}{protein name parsed from protein description, typically generated from database search reference file}
+#' \item{ProteinID}{unique protein ID to which this peptide maps}
+#' \item{PEP}{?}
+#' \item{q-Value}{?}
+#'
 #' @export
 #'
 #' @examples
 #' make_pep_table("mythermofile.msf")
-make_pep_table <- function(msf_file, min_conf = "High", prot_regex = "^>([a-zA-Z0-9._]+)\\b") {
+#'
+#' # Retrieve full protein description
+#'
+#' make_pep_table("mythermofile.msf", prot_regex = "")
+#'
+#' # ...which is also equivalent to...
+#'
+#' make_pep_table("mythermofile.msf", prot_regex = "^(.+)$")
+#'
+make_pep_table <- function(msf_file,
+                           min_conf = "High",
+                           prot_regex = "^>([a-zA-Z0-9._]+)\\b",
+                           collapse = TRUE) {
 
   confidence <- switch(min_conf,
                        High = 3,
                        Medium = 2,
                        Low = 1,
                        3)
+
+  if (prot_regex == "") {
+    prot_regex = "^(.+)$"
+  }
 
   # Access MSF database file
   my_db <- src_sqlite(msf_file)
@@ -40,11 +66,16 @@ make_pep_table <- function(msf_file, min_conf = "High", prot_regex = "^>([a-zA-Z
     collect() %>%
     # Extract protein ID; assumes that protein ID is immediately after ">" and ends with a space
     mutate(Proteins = str_match(Description, prot_regex)[,2]) %>%
-    group_by(PeptideID) %>%
-    summarize(SpectrumID = unique(SpectrumID),
-              Sequence = unique(Sequence),
-              Proteins = paste(Proteins, collapse = "; "))
-
+    group_by(PeptideID)
+  # Collapse peptides that map to multiple proteins into a single row
+  if (collapse == TRUE) {
+    pep_table <- pep_table %>%
+      summarize(SpectrumID = unique(SpectrumID),
+                Sequence = unique(Sequence),
+                Proteins = paste(Proteins, collapse = "; "),
+                ProteinID = paste(ProteinID, collapse = "; "))
+  }
+  pep_table <- pep_table %>% select(PeptideID, SpectrumID, Sequence, Proteins, ProteinID)
   # Append custom fields
   CustomFields <- tbl(my_db, "CustomDataFields")
 

@@ -1,2 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+test_data
+.gitignore
+R/create_test_db.R

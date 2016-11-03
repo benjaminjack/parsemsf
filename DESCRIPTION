@@ -1,7 +1,7 @@
 Package: parsemsf
-Title: What the Package Does (one line, title case)
-Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
+Title: Parse ThermoMSF Files and Estimate Protein Abundances
+Version: 0.1.0.0
+Authors@R: person("Benjamin", "Jack", email = "benjamin.r.jack@gmail.com", role = c("aut", "cre"))
 Description: What the package does (one paragraph).
 Depends:
     R (>= 3.2.4)
@@ -11,8 +11,10 @@ LazyData: true
 RoxygenNote: 5.0.1
 Imports:
     dplyr,
+    purrr,
     magrittr,
     readr,
     RSQLite,
     stringr,
     tidyr
+Suggests: testthat

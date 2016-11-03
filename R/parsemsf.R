@@ -10,7 +10,6 @@
 #' @name foo
 #'
 #' @import dplyr
-#' @import magrittr
 #' @import tidyr
 #' @import stringr
 
