@@ -9,8 +9,8 @@
 #' @export
 #'
 #' @examples
-#' make_auc_table("mythermofile.msf")
-make_auc_table <- function(msf_file, min_conf = "High", prot_regex = "^>([a-zA-Z0-9._]+)\\b") {
+#' make_area_table("mythermofile.msf")
+make_area_table <- function(msf_file, min_conf = "High", prot_regex = "^>([a-zA-Z0-9._]+)\\b") {
 
   # Access MSF database file
   my_db <- src_sqlite(msf_file)
@@ -26,12 +26,12 @@ make_auc_table <- function(msf_file, min_conf = "High", prot_regex = "^>([a-zA-Z
   # Here is where all the scan information, including mass and charge
   SpectrumHeaders <- tbl(my_db, "SpectrumHeaders") %>%
     select(SpectrumID, FirstScan, Mass, Charge, RetentionTime, UniqueSpectrumID) %>%
-    collect()
+    collect(n = Inf)
 
   # Grab intensities
   MassPeaks <- tbl(my_db, "MassPeaks") %>%
     select(MassPeakID, Intensity) %>%
-    collect()
+    collect(n = Inf)
 
   # Here are all the areas
   # m/z is really just one of many m/z's that could be retrieved from the msf file.
@@ -39,7 +39,7 @@ make_auc_table <- function(msf_file, min_conf = "High", prot_regex = "^>([a-zA-Z
   # I don't use m/z's for my work.
   events_joined <- inner_join(Events, EventAreaAnnotations, by = "EventID") %>%
     inner_join(PrecursorIonAreaSearchSpectra, by = "QuanResultID") %>%
-    collect()  %>%
+    collect(n = Inf)  %>%
     group_by(SearchSpectrumID) %>%
     summarize(Area = sum(Area), m_z = mean(Mass))
 

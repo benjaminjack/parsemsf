@@ -2,7 +2,7 @@
 % Please edit documentation in R/make_pep_table.R
 \name{make_pep_table}
 \alias{make_pep_table}
-\title{Make a data frame of peptides from a thermo MSF file}
+\title{Make a data frame of peptides from a Thermo MSF file}
 \usage{
 make_pep_table(msf_file, min_conf = "High",
   prot_regex = "^>([a-zA-Z0-9._]+)\\\\b", collapse = TRUE)
@@ -14,7 +14,7 @@ make_pep_table(msf_file, min_conf = "High",
 
 \item{prot_regex}{Regular expression where the first group matches a protein name or ID from the protein description. Regex must contain ONE group. The protein description is typically generated from a fasta reference file that was used for the database search.}
 
-\item{collapse}{If TRUE, peptides that match to multiple protein sequences are collapsed into a single row with multiple protein IDs in the `Proteins` column, separated by a ";".}
+\item{collapse}{If TRUE, peptides that match to multiple protein sequences are collapsed into a single row with multiple protein descriptions and protein IDs in the \code{Proteins} and \code{ProteinID} columns separated by semi-colons (";").}
 }
 \value{
 A data frame of all peptides above the confidence cut-off from a thermo MSF file.
@@ -28,7 +28,7 @@ A data frame of all peptides above the confidence cut-off from a thermo MSF file
 \item{q-Value}{?}
 }
 \description{
-Make a data frame of peptides from a thermo MSF file
+Extracts amino acid sequences (without post-translational modifications), protein matches, and quality scores.
 }
 \examples{
 make_pep_table("mythermofile.msf")

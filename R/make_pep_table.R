@@ -1,10 +1,11 @@
 
-#' Make a data frame of peptides from a thermo MSF file
+#' Make a data frame of peptides from a Thermo MSF file
 #'
+#' @description Extracts amino acid sequences (without post-translational modifications), protein matches, and quality scores.
 #' @param msf_file A file path to a thermo MSF file.
 #' @param min_conf "High", "Medium", or "Low". The mininum peptide confidence level to retrieve from MSF file.
 #' @param prot_regex Regular expression where the first group matches a protein name or ID from the protein description. Regex must contain ONE group. The protein description is typically generated from a fasta reference file that was used for the database search.
-#' @param collapse If TRUE, peptides that match to multiple protein sequences are collapsed into a single row with multiple protein IDs in the `Proteins` column, separated by a ";".
+#' @param collapse If TRUE, peptides that match to multiple protein sequences are collapsed into a single row with multiple protein descriptions and protein IDs in the \code{Proteins} and \code{ProteinID} columns separated by semi-colons (";").
 #'
 #' @return A data frame of all peptides above the confidence cut-off from a thermo MSF file.
 #'
@@ -63,7 +64,7 @@ make_pep_table <- function(msf_file,
   # Build a peptide table
   pep_table <- inner_join(PeptidesProteins, Peptides, by = c("PeptideID" = "PeptideID")) %>%
     inner_join(ProteinAnnotations, by = "ProteinID") %>%
-    collect() %>%
+    collect(n = Inf) %>%
     # Extract protein ID; assumes that protein ID is immediately after ">" and ends with a space
     mutate(Proteins = str_match(Description, prot_regex)[,2]) %>%
     group_by(PeptideID)
@@ -86,7 +87,7 @@ make_pep_table <- function(msf_file,
   # Spread custom fields as separate columns
   custom_data <- left_join(CustomPeptides, CustomFields, by = "FieldID") %>%
     select(PeptideID, DisplayName, FieldValue) %>%
-    collect() %>%
+    collect(n = Inf) %>%
     spread(DisplayName, FieldValue)
 
   # Join to peptide table
