@@ -1,34 +1,49 @@
 
 #' Make a table of peptide areas
 #'
+#' Areas under each peptide peak that can be used downstream for quantitation.
+#' See \code{\link{combine_tech_reps}} for protein quantitation.
+#'
 #' @inheritParams  make_pep_table
 #'
 #' @return A data frame containing peptide areas for peptides at or above the minimum confidence level.
+#'
+#' \item{PeptideID}{a unique peptide ID}
+#' \item{Sequence}{amino acid sequence (does not show post-translational modifications)}
+#' \item{Proteins}{protein name from protein description in reference database, parsed according to \code{prot_regex}}
+#' \item{Area}{area under peptide peak}
+#' \item{Mass}{peptide mass}
+#' \item{m_z}{mass-to-charge ratio}
+#' \item{Charge}{peptide charge}
+#' \item{Intensity}{peak intensity; useful if no area is available}
+#' \item{FirstScan}{?}
+#' \item{SpectrumID}{a unique spectrum ID}
+#'
 #' @export
 #'
 #' @examples
-#' make_area_table("mythermofile.msf")
+#' make_area_table(parse_msf("test_db.msf"))
 make_area_table <- function(msf_file, min_conf = "High", prot_regex = "^>([a-zA-Z0-9._]+)\\b", collapse = TRUE) {
 
   # Access MSF database file
   my_db <- src_sqlite(msf_file)
 
   Events <- tbl(my_db, "Events") %>%
-    select(-RT, -LeftRT, -RightRT, -SN, -FileID, -Intensity)
+    select_(~-RT, ~-LeftRT, ~-RightRT, ~-SN, ~-FileID, ~-Intensity)
 
   EventAreaAnnotations <- tbl(my_db, "EventAreaAnnotations") %>%
-    select(EventID, QuanResultID)
+    select_(~EventID, ~QuanResultID)
 
   PrecursorIonAreaSearchSpectra <- tbl(my_db, "PrecursorIonAreaSearchSpectra")
 
   # Here is where all the scan information, including mass and charge
   SpectrumHeaders <- tbl(my_db, "SpectrumHeaders") %>%
-    select(SpectrumID, FirstScan, Mass, Charge, RetentionTime, UniqueSpectrumID) %>%
+    select_(~SpectrumID, ~FirstScan, ~Mass, ~Charge, ~RetentionTime, ~UniqueSpectrumID) %>%
     collect(n = Inf)
 
   # Grab intensities
   MassPeaks <- tbl(my_db, "MassPeaks") %>%
-    select(MassPeakID, Intensity) %>%
+    select_(~MassPeakID, ~Intensity) %>%
     collect(n = Inf)
 
   # Here are all the areas
@@ -38,8 +53,9 @@ make_area_table <- function(msf_file, min_conf = "High", prot_regex = "^>([a-zA-
   events_joined <- inner_join(Events, EventAreaAnnotations, by = "EventID") %>%
     inner_join(PrecursorIonAreaSearchSpectra, by = "QuanResultID") %>%
     collect(n = Inf)  %>%
-    group_by(SearchSpectrumID) %>%
-    summarize(Area = sum(Area), m_z = mean(Mass))
+    group_by_(~SearchSpectrumID) %>%
+    summarize_(.dots = setNames(list(~sum(Area), ~mean(Mass)),
+                               c("Area", "m_z")))
 
   # NOTE: mass and m/z are probably not correct right now! I have check them in more detail
 
@@ -53,16 +69,16 @@ make_area_table <- function(msf_file, min_conf = "High", prot_regex = "^>([a-zA-
 
   # Join peptide info to mass/area/charge/etc.
   auc_table <- right_join(spectra, pep_table, by=c("SpectrumID" = "SpectrumID")) %>%
-    select(PeptideID,
-           Sequence,
-           Proteins,
-           Area,
-           Mass,
-           m_z,
-           Charge,
-           Intensity,
-           FirstScan,
-           SpectrumID)
+    select_(~PeptideID,
+            ~Sequence,
+            ~Proteins,
+            ~Area,
+            ~Mass,
+            ~m_z,
+            ~Charge,
+            ~Intensity,
+            ~FirstScan,
+            ~SpectrumID)
 
   return(auc_table)
 

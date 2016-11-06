@@ -18,11 +18,23 @@ make_area_table(msf_file, min_conf = "High",
 }
 \value{
 A data frame containing peptide areas for peptides at or above the minimum confidence level.
+
+\item{PeptideID}{a unique peptide ID}
+\item{Sequence}{amino acid sequence (does not show post-translational modifications)}
+\item{Proteins}{protein name from protein description in reference database, parsed according to \code{prot_regex}}
+\item{Area}{area under peptide peak}
+\item{Mass}{peptide mass}
+\item{m_z}{mass-to-charge ratio}
+\item{Charge}{peptide charge}
+\item{Intensity}{peak intensity; useful if no area is available}
+\item{FirstScan}{?}
+\item{SpectrumID}{a unique spectrum ID}
 }
 \description{
-Make a table of peptide areas
+Areas under each peptide peak that can be used downstream for quantitation.
+See \code{\link{combine_tech_reps}} for protein quantitation.
 }
 \examples{
-make_area_table("mythermofile.msf")
+make_area_table(parse_msf("test_db.msf"))
 }
 

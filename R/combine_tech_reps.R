@@ -9,23 +9,26 @@
 #' @return A data frame with the columns \code{area_mean}, \code{area_sd}, \code{peps_per_tech_rep}, which corresponds to the average area, the standard deviation of the areas, and the number of peptides that were averaged together divided by the number of replicates. This dataframe corresponds to a single protein group.
 #' @export
 #'
+#' @keywords internal
+#'
 #' @examples
-#' merge_top_peptides(df, 2, match_peps = T)
+#' # merge_top_peptides(df, 2, match_peps = T)
 merge_top_peptides <- function(df, num_reps, match_peps = TRUE) {
 
   df %>%
-    group_by(tech_rep, Sequence) %>%
-    distinct(Area) %>% # Remove peptides with identical areas
-    summarize(Area = sum(Area, na.rm = T)) %>% # Sum across peptides with different charges
-    group_by(tech_rep) %>%
-    top_n(3, Area) %>% # Find top 3 peptides
+    group_by_(~tech_rep, ~Sequence) %>%
+    distinct_(.dots = list(~Area)) %>% # Remove peptides with identical areas
+    summarize_(.dots = setNames(list(~sum(Area, na.rm = T)),
+                                c("Area"))) %>% # Sum across peptides with different charges
+    group_by_(~tech_rep) %>%
+    filter_(~ min_rank(desc(Area)) <= 3) %>% # Find top 3 peptides
     ungroup() -> df
 
   if (match_peps == TRUE) {
-    df %>% group_by(Sequence) %>%
-      mutate(n = n()) %>% # Count number of matched peptides
+    df %>% group_by_(~Sequence) %>%
+      mutate_(.dots = setNames(list(~n()), c("n"))) %>% # Count number of matched peptides
       ungroup() %>%
-      filter(n >= num_reps) -> df # Remove any unmatched peptides
+      filter_(~ n >= num_reps) -> df # Remove any unmatched peptides
   }
 
   df %>%
@@ -49,7 +52,7 @@ merge_top_peptides <- function(df, num_reps, match_peps = TRUE) {
 #' @export
 #'
 #' @examples
-#' combine_tech_reps(c("rep1.msf", "rep2.msf"), relabel = c("NP_12345.1" = "NP_1000.1"))
+#' # combine_tech_reps(c("rep1.msf", "rep2.msf"), relabel = c("NP_12345.1" = "NP_1000.1"))
 combine_tech_reps <- function(reps, normalize = TRUE, match_peps = TRUE, relabel = c()) {
 
   # A list to hold dataframes
@@ -61,7 +64,7 @@ combine_tech_reps <- function(reps, normalize = TRUE, match_peps = TRUE, relabel
   # Add an ID number for technical replicates
   for (i in 1:length(reps)) {
     message(paste("Now processing: ", reps[[i]]))
-    reps_df[[i]] <- make_auc_table(reps[[i]]) %>%
+    reps_df[[i]] <- make_area_table(reps[[i]]) %>%
       mutate(tech_rep = i)
   }
 

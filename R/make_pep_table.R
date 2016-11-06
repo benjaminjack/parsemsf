@@ -20,15 +20,17 @@
 #' @export
 #'
 #' @examples
-#' make_pep_table("mythermofile.msf")
+#' # Read from a path
+#'
+#' make_pep_table(parsemsf_example("test_db.msf"))
 #'
 #' # Retrieve full protein description
 #'
-#' make_pep_table("mythermofile.msf", prot_regex = "")
+#' make_pep_table(parsemsf_example("test_db.msf"), prot_regex = "")
 #'
 #' # ...which is also equivalent to...
 #'
-#' make_pep_table("mythermofile.msf", prot_regex = "^(.+)$")
+#' make_pep_table(parsemsf_example("test_db.msf"), prot_regex = "^(.+)$")
 #'
 make_pep_table <- function(msf_file,
                            min_conf = "High",
@@ -50,33 +52,40 @@ make_pep_table <- function(msf_file,
 
   # This table maps PeptideIDs to ProteinIDs
   PeptidesProteins <- tbl(my_db, "PeptidesProteins") %>%
-    select(PeptideID, ProteinID)
+    select_(~PeptideID, ~ProteinID)
 
   # Here are the actual peptide sequences with corresponding SpectrumIDs
   Peptides <- tbl(my_db, "Peptides") %>%
-    select(PeptideID, SpectrumID, ConfidenceLevel, Sequence) %>%
-    filter(ConfidenceLevel >= confidence)
+    select_(~PeptideID, ~SpectrumID, ~ConfidenceLevel, ~Sequence) %>%
+    filter_(~ ConfidenceLevel >= confidence)
 
   # Protein descriptions are contained in this table
   ProteinAnnotations <- tbl(my_db, "ProteinAnnotations") %>%
-    select(ProteinID, Description)
+    select_(~ProteinID, ~Description)
+
+  # Lazy-eval formula for protein name matching
+  prot_match <- lazyeval::interp(~str_match(Description, prot_regex)[,2], prot_regex = prot_regex)
 
   # Build a peptide table
   pep_table <- inner_join(PeptidesProteins, Peptides, by = c("PeptideID" = "PeptideID")) %>%
     inner_join(ProteinAnnotations, by = "ProteinID") %>%
     collect(n = Inf) %>%
     # Extract protein ID; assumes that protein ID is immediately after ">" and ends with a space
-    mutate(Proteins = str_match(Description, prot_regex)[,2]) %>%
-    group_by(PeptideID)
+    mutate_(.dots = setNames(list(prot_match), c("Proteins"))) %>%
+    group_by_(~PeptideID)
   # Collapse peptides that map to multiple proteins into a single row
   if (collapse == TRUE) {
     pep_table <- pep_table %>%
-      summarize(SpectrumID = unique(SpectrumID),
-                Sequence = unique(Sequence),
-                Proteins = paste(Proteins, collapse = "; "),
-                ProteinID = paste(ProteinID, collapse = "; "))
+      summarize_(.dots = setNames(list(~unique(SpectrumID),
+                                       ~unique(Sequence),
+                                       ~paste(Proteins, sep = "; "),
+                                       ~paste(ProteinID, sep = "; ")),
+                                  c("SpectrumID",
+                                    "Sequence",
+                                    "Proteins",
+                                    "ProteinID")))
   }
-  pep_table <- pep_table %>% select(PeptideID, SpectrumID, Sequence, Proteins, ProteinID)
+  pep_table <- pep_table %>% select_(~PeptideID, ~SpectrumID, ~Sequence, ~Proteins, ~ProteinID)
   # Append custom fields
   CustomFields <- tbl(my_db, "CustomDataFields")
 
@@ -86,9 +95,9 @@ make_pep_table <- function(msf_file,
 
   # Spread custom fields as separate columns
   custom_data <- left_join(CustomPeptides, CustomFields, by = "FieldID") %>%
-    select(PeptideID, DisplayName, FieldValue) %>%
+    select_(~PeptideID, ~DisplayName, ~FieldValue) %>%
     collect(n = Inf) %>%
-    spread(DisplayName, FieldValue)
+    spread_("DisplayName", "FieldValue")
 
   # Join to peptide table
   pep_table <- left_join(pep_table, custom_data, by = "PeptideID")

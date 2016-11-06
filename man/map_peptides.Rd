@@ -20,6 +20,6 @@ A dataframe containing start and stop positions (relative to the parent protein 
 Takes a Thermo MSF file and finds the location of each peptide within its corresponding protein sequence. In cases where a single peptide maps to multiple locations within a protein sequence, only the first location is reported.
 }
 \examples{
-map_peptides("mythermofile.msf")
+# map_peptides("mythermofile.msf")
 }
 

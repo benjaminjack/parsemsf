@@ -23,6 +23,6 @@ A data frame with the columns \code{area_mean}, \code{area_sd}, \code{peps_per_t
 Takes a list of thermo MSF files, parses and combines them into a single data frame, and computes areas for each protein group based on the top 3 method of quantitation.
 }
 \examples{
-combine_tech_reps(c("rep1.msf", "rep2.msf"), relabel = c("NP_12345.1" = "NP_1000.1"))
+# combine_tech_reps(c("rep1.msf", "rep2.msf"), relabel = c("NP_12345.1" = "NP_1000.1"))
 }
 

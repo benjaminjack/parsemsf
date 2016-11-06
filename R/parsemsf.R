@@ -10,7 +10,9 @@
 #' @name foo
 #'
 #' @import dplyr
+#' @importFrom lazyeval interp
 #' @import tidyr
+#' @importFrom stats setNames
 #' @import stringr
 
 NULL

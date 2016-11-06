@@ -31,15 +31,17 @@ A data frame of all peptides above the confidence cut-off from a thermo MSF file
 Extracts amino acid sequences (without post-translational modifications), protein matches, and quality scores.
 }
 \examples{
-make_pep_table("mythermofile.msf")
+# Read from a path
+
+make_pep_table(parsemsf_example("test_db.msf"))
 
 # Retrieve full protein description
 
-make_pep_table("mythermofile.msf", prot_regex = "")
+make_pep_table(parsemsf_example("test_db.msf"), prot_regex = "")
 
 # ...which is also equivalent to...
 
-make_pep_table("mythermofile.msf", prot_regex = "^(.+)$")
+make_pep_table(parsemsf_example("test_db.msf"), prot_regex = "^(.+)$")
 
 }
 

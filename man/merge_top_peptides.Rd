@@ -20,6 +20,7 @@ A data frame with the columns \code{area_mean}, \code{area_sd}, \code{peps_per_t
 Takes a data frame containing peptide information for a single protein group and several technical replicates and averages the most abundant peptides (by area) across all replicates. By default, this function takes the averages across the top three peptides. This function will also optionally match peptides across replicates so only matching peptides are averaged together.
 }
 \examples{
-merge_top_peptides(df, 2, match_peps = T)
+# merge_top_peptides(df, 2, match_peps = T)
 }
+\keyword{internal}
 

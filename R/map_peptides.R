@@ -9,7 +9,7 @@
 #' @export
 #'
 #' @examples
-#' map_peptides("mythermofile.msf")
+#' # map_peptides("mythermofile.msf")
 map_peptides <- function(msf_file, min_conf = "High", prot_regex = "") {
 
   pep_table <- make_pep_table(msf_file, min_conf, collapse = FALSE) %>%
