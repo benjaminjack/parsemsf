@@ -10,9 +10,9 @@
 #' @return A data frame of all peptides above the confidence cut-off from a thermo MSF file.
 #'
 #' \item{PeptideID}{a unique peptide ID}
-#' \item{SpectrumID}{?}
+#' \item{SpectrumID}{a unique spectrum ID}
 #' \item{Sequence}{amino acid sequence (does not show post-translational modifications)}
-#' \item{Proteins}{protein name parsed from protein description, typically generated from database search reference file}
+#' \item{Proteins}{protein name from protein description in reference database, parsed according to \code{prot_regex}}
 #' \item{ProteinID}{unique protein ID to which this peptide maps}
 #' \item{PEP}{?}
 #' \item{q-Value}{?}

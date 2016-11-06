@@ -5,14 +5,16 @@
 \title{Make a table of peptide areas}
 \usage{
 make_area_table(msf_file, min_conf = "High",
-  prot_regex = "^>([a-zA-Z0-9._]+)\\\\b")
+  prot_regex = "^>([a-zA-Z0-9._]+)\\\\b", collapse = TRUE)
 }
 \arguments{
 \item{msf_file}{A file path to a thermo MSF file.}
 
 \item{min_conf}{"High", "Medium", or "Low". The mininum peptide confidence level to retrieve from MSF file.}
 
-\item{prot_regex}{Regular expression that extracts a protein ID from the protein description. The protein description is typically generated from a fasta reference file that was used for the database search.}
+\item{prot_regex}{Regular expression where the first group matches a protein name or ID from the protein description. Regex must contain ONE group. The protein description is typically generated from a fasta reference file that was used for the database search.}
+
+\item{collapse}{If TRUE, peptides that match to multiple protein sequences are collapsed into a single row with multiple protein descriptions and protein IDs in the \code{Proteins} and \code{ProteinID} columns separated by semi-colons (";").}
 }
 \value{
 A data frame containing peptide areas for peptides at or above the minimum confidence level.

@@ -1,10 +1,9 @@
 
 #' Map peptides to their locations within a protein
 #'
-#' Takes a thermo MSF file and uses `stringr` to find the location of peptides within their corresponding protein sequences.
+#' Takes a Thermo MSF file and finds the location of each peptide within its corresponding protein sequence. In cases where a single peptide maps to multiple locations within a protein sequence, only the first location is reported.
 #'
-#' @param msf_file
-#' @param min_conf
+#' @inheritParams make_pep_table
 #'
 #' @return A dataframe containing start and stop positions (relative to the parent protein sequence) for each peptide in the database.
 #' @export

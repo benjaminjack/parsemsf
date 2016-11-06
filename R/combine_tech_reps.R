@@ -2,9 +2,9 @@
 #'
 #' Takes a data frame containing peptide information for a single protein group and several technical replicates and averages the most abundant peptides (by area) across all replicates. By default, this function takes the averages across the top three peptides. This function will also optionally match peptides across replicates so only matching peptides are averaged together.
 #'
-#' @param df A data frame generated from \code{\link{make_auc_table}} for a single protein group with the column \code{tech_rep} to indicate the technical replicate
+#' @param df A data frame generated from \code{\link{make_area_table}} for a single protein group with the column \code{tech_rep} to indicate the technical replicate
 #' @param num_reps numeric Number of technical replicates being combined
-#' @param match_peps boolean Should we only quantitate based on the top three peptides present in all replicates?
+#' @param match_peps boolean Should we only quantitate based on peptides present in all replicates?
 #'
 #' @return A data frame with the columns \code{area_mean}, \code{area_sd}, \code{peps_per_tech_rep}, which corresponds to the average area, the standard deviation of the areas, and the number of peptides that were averaged together divided by the number of replicates. This dataframe corresponds to a single protein group.
 #' @export
@@ -70,23 +70,23 @@ combine_tech_reps <- function(reps, normalize = TRUE, match_peps = TRUE, relabel
 
   # Rename some protein groups
   if (length(relabel) > 0) {
-    combined %<>% mutate(Proteins = str_replace_all(Proteins, relabel))
+    combined %>% mutate(Proteins = str_replace_all(Proteins, relabel)) -> combined
   }
 
   # Check if we should normalize to total area for a given replicate
   # This accounts for any variability in how the sample was injected
   message("Quantitating...")
   if (normalize == TRUE) {
-    combined %<>%
+    combined %>%
       group_by(tech_rep) %>%
       mutate(total_area = sum(Area, na.rm = TRUE), Area = Area/total_area) %>%
-      ungroup()
+      ungroup() -> combined
   }
 
   # Quantitate using top three most abundant areas
-  combined %<>%
+  combined %>%
     group_by(Proteins) %>%
-    do(merge_top_peptides(., num_reps, match_peps = match_peps))
+    do(merge_top_peptides(., num_reps, match_peps = match_peps)) -> combined
 
   return(combined)
 

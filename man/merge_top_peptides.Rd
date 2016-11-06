@@ -7,11 +7,11 @@
 merge_top_peptides(df, num_reps, match_peps = TRUE)
 }
 \arguments{
-\item{df}{A data frame generated from \code{\link{make_auc_table}} for a single protein group with the column \code{tech_rep} to indicate the technical replicate}
+\item{df}{A data frame generated from \code{\link{make_area_table}} for a single protein group with the column \code{tech_rep} to indicate the technical replicate}
 
 \item{num_reps}{numeric Number of technical replicates being combined}
 
-\item{match_peps}{boolean Should we only quantitate based on the top three peptides present in all replicates?}
+\item{match_peps}{boolean Should we only quantitate based on peptides present in all replicates?}
 }
 \value{
 A data frame with the columns \code{area_mean}, \code{area_sd}, \code{peps_per_tech_rep}, which corresponds to the average area, the standard deviation of the areas, and the number of peptides that were averaged together divided by the number of replicates. This dataframe corresponds to a single protein group.

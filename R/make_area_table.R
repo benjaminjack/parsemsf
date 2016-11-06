@@ -1,16 +1,14 @@
 
 #' Make a table of peptide areas
 #'
-#' @param msf_file A file path to a thermo MSF file.
-#' @param min_conf "High", "Medium", or "Low". The mininum peptide confidence level to retrieve from MSF file.
-#' @param prot_regex Regular expression that extracts a protein ID from the protein description. The protein description is typically generated from a fasta reference file that was used for the database search.
+#' @inheritParams  make_pep_table
 #'
 #' @return A data frame containing peptide areas for peptides at or above the minimum confidence level.
 #' @export
 #'
 #' @examples
 #' make_area_table("mythermofile.msf")
-make_area_table <- function(msf_file, min_conf = "High", prot_regex = "^>([a-zA-Z0-9._]+)\\b") {
+make_area_table <- function(msf_file, min_conf = "High", prot_regex = "^>([a-zA-Z0-9._]+)\\b", collapse = TRUE) {
 
   # Access MSF database file
   my_db <- src_sqlite(msf_file)
@@ -51,7 +49,7 @@ make_area_table <- function(msf_file, min_conf = "High", prot_regex = "^>([a-zA-
   spectra <- left_join(SpectrumHeaders, events_joined, by = c("SpectrumID" = "SearchSpectrumID")) %>%
     inner_join(MassPeaks, by = c("UniqueSpectrumID" = "MassPeakID"))
 
-  pep_table <- make_pep_table(msf_file, min_conf, prot_regex)
+  pep_table <- make_pep_table(msf_file, min_conf, prot_regex, collapse)
 
   # Join peptide info to mass/area/charge/etc.
   auc_table <- right_join(spectra, pep_table, by=c("SpectrumID" = "SpectrumID")) %>%
