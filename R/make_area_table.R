@@ -22,7 +22,7 @@
 #' @export
 #'
 #' @examples
-#' make_area_table(parse_msf("test_db.msf"))
+#' make_area_table(parsemsf_example("test_db.msf"))
 make_area_table <- function(msf_file, min_conf = "High", prot_regex = "^>([a-zA-Z0-9._]+)\\b", collapse = TRUE) {
 
   # Access MSF database file

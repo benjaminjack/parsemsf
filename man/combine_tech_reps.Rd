@@ -17,12 +17,19 @@ combine_tech_reps(reps, normalize = TRUE, match_peps = TRUE,
 \item{relabel}{Named vector for relabeling protein groups. Names correspond to a pattern or string to match (i.e. the name or ID of a protein group), and values correspond to the new value (i.e. new protein group name).}
 }
 \value{
-A data frame with the columns \code{area_mean}, \code{area_sd}, \code{peps_per_tech_rep}, which corresponds to the average area, the standard deviation of the areas, and the number of peptides that were averaged together divided by the number of replicates for each protein group. This dataframe contains all protein groups.
+A data frame containing area information for all proteins.
+
+\item{Proteins}{protein description}
+\item{area_mean}{average peptide area}
+\item{area_sd}{peptide area standard deviation}
+\item{peps_per_tech_rep}{Number of peptides per technical replicate used to calculate \code{area_mean} and \code{area_sd}. This is typically 3 peptides, but may be less.}
 }
 \description{
 Takes a list of thermo MSF files, parses and combines them into a single data frame, and computes areas for each protein group based on the top 3 method of quantitation.
 }
 \examples{
-# combine_tech_reps(c("rep1.msf", "rep2.msf"), relabel = c("NP_12345.1" = "NP_1000.1"))
+combine_tech_reps(c(parsemsf_example("test_db.msf"),
+                    parsemsf_example("test_db2.msf")),
+                  relabel = c("NP_12345.1" = "NP_1000.1"))
 }
 

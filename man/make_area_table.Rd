@@ -35,6 +35,6 @@ Areas under each peptide peak that can be used downstream for quantitation.
 See \code{\link{combine_tech_reps}} for protein quantitation.
 }
 \examples{
-make_area_table(parse_msf("test_db.msf"))
+make_area_table(parsemsf_example("test_db.msf"))
 }
 

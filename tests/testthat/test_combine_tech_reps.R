@@ -13,3 +13,15 @@ reps <- bind_rows(rep1, rep2)
 test_that("merge_top_peptides creates a data frame with the correct column names", {
   expect_equal(colnames(merge_top_peptides(reps, 2)), pep_col_names)
 })
+
+pep_col_names <- c("Proteins",
+                   "area_mean",
+                   "area_sd",
+                   "peps_per_tech_rep")
+
+test_that("combine_tech_reps creates a data frame with the correct column names", {
+  expect_equal(colnames(combine_tech_reps(reps = c(parsemsf_example("test_db.msf"),
+                                                   parsemsf_example("test_db2.msf")))), pep_col_names)
+})
+
+

@@ -14,13 +14,17 @@ merge_top_peptides(df, num_reps, match_peps = TRUE)
 \item{match_peps}{boolean Should we only quantitate based on peptides present in all replicates?}
 }
 \value{
-A data frame with the columns \code{area_mean}, \code{area_sd}, \code{peps_per_tech_rep}, which corresponds to the average area, the standard deviation of the areas, and the number of peptides that were averaged together divided by the number of replicates. This dataframe corresponds to a single protein group.
+A data frame that corresponds to a single protein group.
+
+\item{area_mean}{average peptide area}
+\item{area_sd}{peptide area standard deviation}
+\item{peps_per_tech_rep}{number of peptides per technical replicate used to calculate area_mean and area_sd. This is typically 3, but may be less.}
 }
 \description{
 Takes a data frame containing peptide information for a single protein group and several technical replicates and averages the most abundant peptides (by area) across all replicates. By default, this function takes the averages across the top three peptides. This function will also optionally match peptides across replicates so only matching peptides are averaged together.
 }
 \examples{
-# merge_top_peptides(df, 2, match_peps = T)
+\dontrun{merge_top_peptides(df, 2, match_peps = T)}
 }
 \keyword{internal}
 
