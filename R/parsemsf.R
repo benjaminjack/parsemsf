@@ -1,13 +1,7 @@
-#' foo: A package for computating the notorious bar statistic.
-#'
-#' The foo package provides three categories of important functions:
-#' foo, bar and baz.
-#'
-#' @section Foo functions:
-#' The foo functions ...
+#' parsemsf: Parse Thermo MSF files and estimate protein abundances.
 #'
 #' @docType package
-#' @name foo
+#' @name parsemsf
 #'
 #' @import dplyr
 #' @importFrom lazyeval interp
