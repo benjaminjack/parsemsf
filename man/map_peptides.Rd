@@ -7,7 +7,7 @@
 map_peptides(msf_file, min_conf = "High", prot_regex = "")
 }
 \arguments{
-\item{msf_file}{A file path to a thermo MSF file.}
+\item{msf_file}{A file path to a Thermo MSF file.}
 
 \item{min_conf}{"High", "Medium", or "Low". The mininum peptide confidence level to retrieve from MSF file.}
 
@@ -16,14 +16,14 @@ map_peptides(msf_file, min_conf = "High", prot_regex = "")
 \value{
 A dataframe containing start and stop positions (relative to the parent protein sequence) for each peptide in the database.
 
-\item{PeptideID}{unique peptide ID}
-\item{SpectrumID}{unique spectrum ID}
-\item{Pep_seq}{peptide sequence}
-\item{Proteins}{protein description}
-\item{ProteinID}{unique proteinID}
-\item{PEP}{?}
-\item{q-Value}{?}
-\item{Prot_seq}{parent protein sequence}
+\item{peptide_id}{a unique peptide ID}
+\item{spectrum_id}{a unique spectrum ID}
+\item{protein_id}{unique protein group ID to which this peptide maps}
+\item{protein_desc}{protein description from reference database used to assign peptides to protein groups, parsed according to \code{prot_regex}}
+\item{peptide_sequence}{amino acid sequence (does not show post-translational modifications)}
+\item{pep_score}{PEP score}
+\item{q_value}{Q-value score}
+\item{protein_sequence}{parent protein sequence}
 \item{start}{start position of peptide within protein sequence}
 \item{end}{end position of peptide within protein sequence}
 }

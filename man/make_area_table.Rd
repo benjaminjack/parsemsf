@@ -8,7 +8,7 @@ make_area_table(msf_file, min_conf = "High",
   prot_regex = "^>([a-zA-Z0-9._]+)\\\\b", collapse = TRUE)
 }
 \arguments{
-\item{msf_file}{A file path to a thermo MSF file.}
+\item{msf_file}{A file path to a Thermo MSF file.}
 
 \item{min_conf}{"High", "Medium", or "Low". The mininum peptide confidence level to retrieve from MSF file.}
 
@@ -19,16 +19,16 @@ make_area_table(msf_file, min_conf = "High",
 \value{
 A data frame containing peptide areas for peptides at or above the minimum confidence level.
 
-\item{PeptideID}{a unique peptide ID}
-\item{Sequence}{amino acid sequence (does not show post-translational modifications)}
-\item{Proteins}{protein name from protein description in reference database, parsed according to \code{prot_regex}}
-\item{Area}{area under peptide peak}
-\item{Mass}{peptide mass}
+\item{peptide_id}{a unique peptide ID}
+\item{spectrum_id}{a unique spectrum ID}
+\item{protein_desc}{protein description from reference database used to assign peptides to protein groups, parsed according to \code{prot_regex}}
+\item{sequence}{amino acid sequence (does not show post-translational modifications)}
+\item{area}{area under peptide peak}
+\item{mass}{peptide mass}
 \item{m_z}{mass-to-charge ratio}
-\item{Charge}{peptide charge}
-\item{Intensity}{peak intensity; useful if no area is available}
-\item{FirstScan}{?}
-\item{SpectrumID}{a unique spectrum ID}
+\item{charge}{peptide charge}
+\item{intensity}{peak intensity; useful if no area is available}
+\item{first_scan}{?}
 }
 \description{
 Areas under each peptide peak that can be used downstream for quantitation.

@@ -14,7 +14,7 @@ test_that("merge_top_peptides creates a data frame with the correct column names
   expect_equal(colnames(merge_top_peptides(reps, 2)), pep_col_names)
 })
 
-pep_col_names <- c("Proteins",
+pep_col_names <- c("protein_desc",
                    "area_mean",
                    "area_sd",
                    "peps_per_tech_rep")

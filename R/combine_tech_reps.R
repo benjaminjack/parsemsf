@@ -20,23 +20,23 @@
 merge_top_peptides <- function(df, num_reps, match_peps = TRUE) {
 
   df %>%
-    group_by_(~tech_rep, ~Sequence) %>%
-    distinct_(.dots = list(~Area)) %>% # Remove peptides with identical areas
-    summarize_(.dots = setNames(list(~sum(Area, na.rm = T)),
-                                c("Area"))) %>% # Sum across peptides with different charges
+    group_by_(~tech_rep, ~sequence) %>%
+    distinct_(.dots = list(~area)) %>% # Remove peptides with identical areas
+    summarize_(.dots = setNames(list(~sum(area, na.rm = T)),
+                                c("area"))) %>% # Sum across peptides with different charges
     group_by_(~tech_rep) %>%
-    filter_(~ min_rank(desc(Area)) <= 3) %>% # Find top 3 peptides
+    filter_(~ min_rank(desc(area)) <= 3) %>% # Find top 3 peptides
     ungroup() -> df
 
   if (match_peps == TRUE) {
-    df %>% group_by_(~Sequence) %>%
+    df %>% group_by_(~sequence) %>%
       mutate_(.dots = setNames(list(~n()), c("n"))) %>% # Count number of matched peptides
       ungroup() %>%
       filter_(~ n >= num_reps) -> df # Remove any unmatched peptides
   }
 
-  dots <- setNames(list(~mean(Area, na.rm = T),
-                        ~sd(Area, na.rm = T),
+  dots <- setNames(list(~mean(area, na.rm = T),
+                        ~sd(area, na.rm = T),
                         ~ n()/num_reps),
                    c("area_mean",
                      "area_sd",
@@ -59,7 +59,7 @@ merge_top_peptides <- function(df, num_reps, match_peps = TRUE) {
 #'
 #' @return A data frame containing area information for all proteins.
 #'
-#' \item{Proteins}{protein description}
+#' \item{protein_desc}{protein description}
 #' \item{area_mean}{average peptide area}
 #' \item{area_sd}{peptide area standard deviation}
 #' \item{peps_per_tech_rep}{Number of peptides per technical replicate used to calculate \code{area_mean} and \code{area_sd}. This is typically 3 peptides, but may be less.}
@@ -91,9 +91,9 @@ combine_tech_reps <- function(reps, normalize = TRUE, match_peps = TRUE, relabel
   # Rename some protein groups
   if (length(relabel) > 0) {
     # Rename lazy eval function
-    rename_lazy = interp(~str_replace_all(Proteins, relabel), relabel = relabel)
+    rename_lazy = interp(~str_replace_all(protein_desc, relabel), relabel = relabel)
     combined %>%
-      mutate_(.dots = setNames(list(rename_lazy), c("Proteins"))) -> combined
+      mutate_(.dots = setNames(list(rename_lazy), c("protein_desc"))) -> combined
   }
 
   # Check if we should normalize to total area for a given replicate
@@ -101,16 +101,16 @@ combine_tech_reps <- function(reps, normalize = TRUE, match_peps = TRUE, relabel
   message("Quantitating...")
   if (normalize == TRUE) {
     # Lazy mutate list
-    normalize_lazy = list(~sum(Area, na.rm = T), ~ Area/total_area)
+    normalize_lazy = list(~sum(area, na.rm = T), ~ area/total_area)
     combined %>%
       group_by_(~tech_rep) %>%
-      mutate_(.dots = setNames(normalize_lazy, c("total_area", "Area"))) %>%
+      mutate_(.dots = setNames(normalize_lazy, c("total_area", "area"))) %>%
       ungroup() -> combined
   }
 
   # Quantitate using top three most abundant areas
   combined %>%
-    group_by_(~Proteins) %>%
+    group_by_(~protein_desc) %>%
     do_(~merge_top_peptides(., num_reps, match_peps = match_peps)) -> combined
 
   return(combined)

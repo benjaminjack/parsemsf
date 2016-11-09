@@ -2,13 +2,13 @@
 % Please edit documentation in R/make_pep_table.R
 \name{make_pep_table}
 \alias{make_pep_table}
-\title{Make a data frame of peptides from a Thermo MSF file}
+\title{Make a data frame of peptides}
 \usage{
 make_pep_table(msf_file, min_conf = "High",
   prot_regex = "^>([a-zA-Z0-9._]+)\\\\b", collapse = TRUE)
 }
 \arguments{
-\item{msf_file}{A file path to a thermo MSF file.}
+\item{msf_file}{A file path to a Thermo MSF file.}
 
 \item{min_conf}{"High", "Medium", or "Low". The mininum peptide confidence level to retrieve from MSF file.}
 
@@ -19,16 +19,16 @@ make_pep_table(msf_file, min_conf = "High",
 \value{
 A data frame of all peptides above the confidence cut-off from a thermo MSF file.
 
-\item{PeptideID}{a unique peptide ID}
-\item{SpectrumID}{a unique spectrum ID}
-\item{Sequence}{amino acid sequence (does not show post-translational modifications)}
-\item{Proteins}{protein name from protein description in reference database, parsed according to \code{prot_regex}}
-\item{ProteinID}{unique protein ID to which this peptide maps}
-\item{PEP}{?}
-\item{q-Value}{?}
+\item{peptide_id}{a unique peptide ID}
+\item{spectrum_id}{a unique spectrum ID}
+\item{protein_id}{unique protein group ID to which this peptide maps}
+\item{protein_desc}{protein description from reference database used to assign peptides to protein groups, parsed according to \code{prot_regex}}
+\item{sequence}{amino acid sequence (does not show post-translational modifications)}
+\item{pep_score}{PEP score}
+\item{q_value}{Q-value score}
 }
 \description{
-Extracts amino acid sequences (without post-translational modifications), protein matches, and quality scores.
+Extracts amino acid sequences (without post-translational modifications), assigned protein groups, and quality scores.
 }
 \examples{
 # Read from a path

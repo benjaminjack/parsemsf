@@ -7,14 +7,14 @@
 #'
 #' @return A dataframe containing start and stop positions (relative to the parent protein sequence) for each peptide in the database.
 #'
-#' \item{PeptideID}{unique peptide ID}
-#' \item{SpectrumID}{unique spectrum ID}
-#' \item{Pep_seq}{peptide sequence}
-#' \item{Proteins}{protein description}
-#' \item{ProteinID}{unique proteinID}
-#' \item{PEP}{?}
-#' \item{q-Value}{?}
-#' \item{Prot_seq}{parent protein sequence}
+#' \item{peptide_id}{a unique peptide ID}
+#' \item{spectrum_id}{a unique spectrum ID}
+#' \item{protein_id}{unique protein group ID to which this peptide maps}
+#' \item{protein_desc}{protein description from reference database used to assign peptides to protein groups, parsed according to \code{prot_regex}}
+#' \item{peptide_sequence}{amino acid sequence (does not show post-translational modifications)}
+#' \item{pep_score}{PEP score}
+#' \item{q_value}{Q-value score}
+#' \item{protein_sequence}{parent protein sequence}
 #' \item{start}{start position of peptide within protein sequence}
 #' \item{end}{end position of peptide within protein sequence}
 #'
@@ -25,7 +25,7 @@
 map_peptides <- function(msf_file, min_conf = "High", prot_regex = "") {
 
   pep_table <- make_pep_table(msf_file, min_conf, collapse = FALSE) %>%
-    rename_(.dots = setNames(list(~Sequence), c("Pep_seq")))
+    rename_(.dots = setNames(list(~sequence), c("peptide_sequence")))
 
   my_db <- src_sqlite(msf_file)
 
@@ -33,11 +33,11 @@ map_peptides <- function(msf_file, min_conf = "High", prot_regex = "") {
     select_(~ProteinID, ~Sequence) %>%
     collect()
 
-  pep_table <- inner_join(pep_table, prots, by = "ProteinID") %>%
-    rename_(.dots = setNames(list(~Sequence), c("Prot_seq"))) %>%
+  pep_table <- inner_join(pep_table, prots, by = c("protein_id" = "ProteinID")) %>%
+    rename_(.dots = setNames(list(~Sequence), c("protein_sequence"))) %>%
     rowwise() %>%
-    mutate_(.dots = setNames(list(~str_locate(Prot_seq, Pep_seq)[1],
-                                  ~str_locate(Prot_seq, Pep_seq)[2]),
+    mutate_(.dots = setNames(list(~str_locate(protein_sequence, peptide_sequence)[1],
+                                  ~str_locate(protein_sequence, peptide_sequence)[2]),
                              c("start",
                                "end")))
 

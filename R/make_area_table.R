@@ -8,16 +8,16 @@
 #'
 #' @return A data frame containing peptide areas for peptides at or above the minimum confidence level.
 #'
-#' \item{PeptideID}{a unique peptide ID}
-#' \item{Sequence}{amino acid sequence (does not show post-translational modifications)}
-#' \item{Proteins}{protein name from protein description in reference database, parsed according to \code{prot_regex}}
-#' \item{Area}{area under peptide peak}
-#' \item{Mass}{peptide mass}
+#' \item{peptide_id}{a unique peptide ID}
+#' \item{spectrum_id}{a unique spectrum ID}
+#' \item{protein_desc}{protein description from reference database used to assign peptides to protein groups, parsed according to \code{prot_regex}}
+#' \item{sequence}{amino acid sequence (does not show post-translational modifications)}
+#' \item{area}{area under peptide peak}
+#' \item{mass}{peptide mass}
 #' \item{m_z}{mass-to-charge ratio}
-#' \item{Charge}{peptide charge}
-#' \item{Intensity}{peak intensity; useful if no area is available}
-#' \item{FirstScan}{?}
-#' \item{SpectrumID}{a unique spectrum ID}
+#' \item{charge}{peptide charge}
+#' \item{intensity}{peak intensity; useful if no area is available}
+#' \item{first_scan}{?}
 #'
 #' @export
 #'
@@ -67,18 +67,31 @@ make_area_table <- function(msf_file, min_conf = "High", prot_regex = "^>([a-zA-
 
   pep_table <- make_pep_table(msf_file, min_conf, prot_regex, collapse)
 
+  # Rename columns for more consistent column naming
+  old_names <- list(~peptide_id,
+                    ~SpectrumID,
+                    ~protein_desc,
+                    ~sequence,
+                    ~Area,
+                    ~Mass,
+                    ~m_z,
+                    ~Charge,
+                    ~Intensity,
+                    ~FirstScan)
+  new_names <- c("peptide_id",
+                 "spectrum_id",
+                 "protein_desc",
+                 "sequence",
+                 "area",
+                 "mass",
+                 "m_z",
+                 "charge",
+                 "intensity",
+                 "first_scan")
+
   # Join peptide info to mass/area/charge/etc.
-  auc_table <- right_join(spectra, pep_table, by=c("SpectrumID" = "SpectrumID")) %>%
-    select_(~PeptideID,
-            ~Sequence,
-            ~Proteins,
-            ~Area,
-            ~Mass,
-            ~m_z,
-            ~Charge,
-            ~Intensity,
-            ~FirstScan,
-            ~SpectrumID)
+  auc_table <- right_join(spectra, pep_table, by=c("SpectrumID" = "spectrum_id")) %>%
+    select_(.dots = setNames(old_names, new_names))
 
   return(auc_table)
 

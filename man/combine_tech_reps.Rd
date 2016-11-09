@@ -19,7 +19,7 @@ combine_tech_reps(reps, normalize = TRUE, match_peps = TRUE,
 \value{
 A data frame containing area information for all proteins.
 
-\item{Proteins}{protein description}
+\item{protein_desc}{protein description}
 \item{area_mean}{average peptide area}
 \item{area_sd}{peptide area standard deviation}
 \item{peps_per_tech_rep}{Number of peptides per technical replicate used to calculate \code{area_mean} and \code{area_sd}. This is typically 3 peptides, but may be less.}

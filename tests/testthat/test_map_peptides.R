@@ -1,14 +1,14 @@
 library(parsemsf)
 context("Map peptides")
 
-pep_col_names <- c("PeptideID",
-                   "SpectrumID",
-                   "Pep_seq",
-                   "Proteins",
-                   "ProteinID",
-                   "PEP",
-                   "q-Value",
-                   "Prot_seq",
+pep_col_names <- c("peptide_id",
+                   "spectrum_id",
+                   "protein_id",
+                   "protein_desc",
+                   "peptide_sequence",
+                   "pep_score",
+                   "q_value",
+                   "protein_sequence",
                    "start",
                    "end")
 
