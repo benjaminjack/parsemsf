@@ -21,6 +21,7 @@ Imports:
     tidyr (>= 0.6.0)
 Suggests: testthat (>= 1.0.2),
     knitr,
-    rmarkdown
+    rmarkdown,
+    ggplot2
 VignetteBuilder: knitr
 BugReports: https://github.com/benjaminjack/parsemsf/issues
