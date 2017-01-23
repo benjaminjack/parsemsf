@@ -21,7 +21,7 @@ A data frame containing area information for all proteins.
 \item{protein_desc}{protein description}
 \item{area_mean}{average peptide area}
 \item{area_sd}{peptide area standard deviation}
-\item{peps_per_tech_rep}{Number of peptides per technical replicate used to calculate \code{area_mean} and \code{area_sd}. This is typically 3 peptides, but may be less.}
+\item{peps_per_rep}{Number of peptides per technical replicate used to calculate \code{area_mean} and \code{area_sd}. This is typically 3 peptides, but may be less.}
 }
 \description{
 Takes a list of thermo MSF files, parses and combines them into a single data frame, and computes areas for each protein group based on the top 3 method of quantitation.

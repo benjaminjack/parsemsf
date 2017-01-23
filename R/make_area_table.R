@@ -2,7 +2,7 @@
 #' Make a table of peptide areas
 #'
 #' Areas under each peptide peak that can be used downstream for quantitation.
-#' See \code{\link{combine_tech_reps}} for protein quantitation.
+#' See \code{\link{quantitate}} for protein quantitation.
 #'
 #' @inheritParams  make_pep_table
 #'

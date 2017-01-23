@@ -32,7 +32,7 @@ A data frame containing peptide areas for peptides at or above the minimum confi
 }
 \description{
 Areas under each peptide peak that can be used downstream for quantitation.
-See \code{\link{combine_tech_reps}} for protein quantitation.
+See \code{\link{quantitate}} for protein quantitation.
 }
 \examples{
 make_area_table(parsemsf_example("test_db.msf"))

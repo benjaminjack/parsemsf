@@ -18,7 +18,7 @@ A data frame that corresponds to a single protein group.
 
 \item{area_mean}{average peptide area}
 \item{area_sd}{peptide area standard deviation}
-\item{peps_per_tech_rep}{number of peptides per technical replicate used to calculate area_mean and area_sd. This is typically 3, but may be less.}
+\item{peps_per_rep}{number of peptides per technical replicate used to calculate area_mean and area_sd. This is typically 3, but may be less.}
 }
 \description{
 Takes a data frame containing peptide information for a single protein group and several technical replicates and averages the most abundant peptides (by area) across all replicates. By default, this function takes the averages across the top three peptides. This function will also optionally match peptides across replicates so only matching peptides are averaged together.

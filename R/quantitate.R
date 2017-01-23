@@ -10,7 +10,7 @@
 #'
 #' \item{area_mean}{average peptide area}
 #' \item{area_sd}{peptide area standard deviation}
-#' \item{peps_per_tech_rep}{number of peptides per technical replicate used to calculate area_mean and area_sd. This is typically 3, but may be less.}
+#' \item{peps_per_rep}{number of peptides per technical replicate used to calculate area_mean and area_sd. This is typically 3, but may be less.}
 #' @export
 #'
 #' @keywords internal
@@ -40,7 +40,7 @@ merge_top_peptides <- function(df, num_reps, match_peps = TRUE) {
                         ~ n()/num_reps),
                    c("area_mean",
                      "area_sd",
-                     "peps_per_tech_rep"))
+                     "peps_per_rep"))
 
   df %>%
     summarize_(.dots = dots) -> matched_areas # Compute mean areas from top peptides
@@ -62,7 +62,7 @@ merge_top_peptides <- function(df, num_reps, match_peps = TRUE) {
 #' \item{protein_desc}{protein description}
 #' \item{area_mean}{average peptide area}
 #' \item{area_sd}{peptide area standard deviation}
-#' \item{peps_per_tech_rep}{Number of peptides per technical replicate used to calculate \code{area_mean} and \code{area_sd}. This is typically 3 peptides, but may be less.}
+#' \item{peps_per_rep}{Number of peptides per technical replicate used to calculate \code{area_mean} and \code{area_sd}. This is typically 3 peptides, but may be less.}
 #'
 #' @export
 #'

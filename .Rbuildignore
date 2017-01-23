@@ -3,3 +3,4 @@
 test_data
 .gitignore
 R/create_test_db.R
+cran_comments.md

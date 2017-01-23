@@ -4,7 +4,7 @@ context("Combine technical replicates and quantitate proteins")
 
 pep_col_names <- c("area_mean",
                    "area_sd",
-                   "peps_per_tech_rep")
+                   "peps_per_rep")
 
 rep1 <- make_area_table(parsemsf_example("test_db.msf")) %>% mutate(tech_rep = 1)
 rep2 <- make_area_table(parsemsf_example("test_db2.msf")) %>% mutate(tech_rep = 2)
@@ -17,11 +17,11 @@ test_that("merge_top_peptides creates a data frame with the correct column names
 pep_col_names <- c("protein_desc",
                    "area_mean",
                    "area_sd",
-                   "peps_per_tech_rep")
+                   "peps_per_rep")
 
-test_that("combine_tech_reps creates a data frame with the correct column names", {
-  expect_equal(colnames(combine_tech_reps(reps = c(parsemsf_example("test_db.msf"),
-                                                   parsemsf_example("test_db2.msf")))), pep_col_names)
+test_that("quantitate creates a data frame with the correct column names", {
+  expect_equal(colnames(quantitate(reps = c(parsemsf_example("test_db.msf"),
+                                            parsemsf_example("test_db2.msf")))), pep_col_names)
 })
 
 
