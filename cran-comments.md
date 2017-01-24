@@ -1,3 +1,8 @@
+## Resubmission
+This is a resubmission. In this version I have made changes to the DESCRIPTION file:
+* Added a link with more information about Proteome Discoverer in the description field.
+* Clearly indicated in the description field that the author of this package has no affilition with ThermoFisher Scientific, the distributors of Proteome Discoverer.
+
 ## Test environments
 * local macOS install x86_64-apple-darwin16.1.0, R 3.3.2
 * R-devel and R 3.3.2 on win-builder (via `devtools::build_win()`)
