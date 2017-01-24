@@ -70,7 +70,7 @@ merge_top_peptides <- function(df, num_reps, match_peps = TRUE) {
 #' quantitate(c(parsemsf_example("test_db.msf"),
 #'              parsemsf_example("test_db2.msf")),
 #'            relabel = c("NP_12345.1" = "NP_1000.1"))
-quantitate <- function(reps, normalize = TRUE, match_peps = TRUE, relabel = c()) {
+quantitate <- function(reps, normalize = T, match_peps = T, relabel = c()) {
 
   # A list to hold dataframes
   reps_df <- list()

@@ -4,7 +4,7 @@
 \alias{quantitate}
 \title{Combine technical replicates and quantitate proteins}
 \usage{
-quantitate(reps, normalize = TRUE, match_peps = TRUE, relabel = c())
+quantitate(reps, normalize = T, match_peps = T, relabel = c())
 }
 \arguments{
 \item{reps}{Vector. List of thermo MSF file names}
