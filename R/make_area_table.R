@@ -17,7 +17,7 @@
 #' \item{m_z}{mass-to-charge ratio}
 #' \item{charge}{peptide charge}
 #' \item{intensity}{peak intensity; useful if no area is available}
-#' \item{first_scan}{?}
+#' \item{first_scan}{first scan in which peptide appears}
 #'
 #' @export
 #'
