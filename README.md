@@ -6,7 +6,13 @@ Currently, the ParseMSF package provides functions for parsing Thermo MSF files 
 
 # Installation
 
-This package is currently under development and can be installed from Github by running the following command in the R console:
+This latest stable release of this package can be installed from [CRAN](https://cran.r-project.org/package=parsemsf) by running the following command in the R console:
+
+```
+install.packages("parsemsf")
+```
+
+If you want to install the development version this package from Github by running the following command in the R console:
 
 ```
 devtools::install_github("benjaminjack/parsemsf")
@@ -14,11 +20,7 @@ devtools::install_github("benjaminjack/parsemsf")
 
 # Usage
 
-To get an introduction to the functions in ParseMSF, please run the following command to see the Introduction vignette (after installing the package):
-
-```
-vignette(introduction, package="parsemsf")
-```
+To get an introduction to the functions in ParseMSF, please see the [Introduction vignette on CRAN](https://cran.r-project.org/package=parsemsf).
 
 # Acknowledgements
 
