@@ -1,5 +1,6 @@
 ## Test environments
 * local macOS install x86_64-apple-darwin16.1.0, R 3.3.2
+* R-devel and R 3.3.2 on win-builder (via `devtools::build_win()`)
 
 ## R CMD check results
 There were no ERRORs or WARNINGs.
@@ -14,3 +15,6 @@ Possibly mis-spelled words in DESCRIPTION:
   peptides (7:5)
 ```
 These spellings are correct.
+
+## Downstream dependencies
+There are no downstream dependencies.
