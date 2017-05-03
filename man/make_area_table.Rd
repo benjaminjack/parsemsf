@@ -37,4 +37,3 @@ See \code{\link{quantitate}} for protein quantitation.
 \examples{
 make_area_table(parsemsf_example("test_db.msf"))
 }
-

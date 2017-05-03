@@ -27,4 +27,3 @@ Takes a data frame containing peptide information for a single protein group and
 \dontrun{merge_top_peptides(df, 2, match_peps = T)}
 }
 \keyword{internal}
-

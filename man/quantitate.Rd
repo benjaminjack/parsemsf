@@ -31,4 +31,3 @@ quantitate(c(parsemsf_example("test_db.msf"),
              parsemsf_example("test_db2.msf")),
            relabel = c("NP_12345.1" = "NP_1000.1"))
 }
-

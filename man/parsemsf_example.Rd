@@ -17,4 +17,3 @@ files in its \code{inst/extdata} directory. This function make them easy to acce
 parsemsf_example("test_db.msf")
 }
 \keyword{internal}
-

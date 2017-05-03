@@ -44,4 +44,3 @@ make_pep_table(parsemsf_example("test_db.msf"), prot_regex = "")
 make_pep_table(parsemsf_example("test_db.msf"), prot_regex = "^(.+)$")
 
 }
-

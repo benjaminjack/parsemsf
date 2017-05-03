@@ -33,4 +33,3 @@ Takes a Thermo MSF file and finds the location of each peptide within its corres
 \examples{
 map_peptides(parsemsf_example("test_db.msf"))
 }
-

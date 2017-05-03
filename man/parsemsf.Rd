@@ -8,4 +8,3 @@
 \description{
 parsemsf: Parse Thermo MSF files and estimate protein abundances.
 }
-

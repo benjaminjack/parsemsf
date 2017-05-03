@@ -1,6 +1,6 @@
 Package: parsemsf
 Title: Parse Thermo MSF Files and Estimate Protein Abundances
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: person("Benjamin", "Jack", email = "benjamin.r.jack@gmail.com", role = c("aut", "cre"))
 Description: Provides functions for parsing Thermo MSF files produced by Proteome Discoverer 1.4.x (see <https://thermofisher.com> for more information). This package makes it easy to view individual peptide information, including peak areas, and to map peptides to locations within the parent protein sequence. This package also estimates protein abundances from peak areas and across multiple technical replicates. The author of this package is not affiliated with ThermoFisher Scientific in any way.
 URL: https://github.com/benjaminjack/parsemsf/
@@ -9,9 +9,10 @@ Depends:
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 Imports:
     dplyr (>= 0.5.0),
+    dbplyr,
     lazyeval,
     RSQLite (>= 1.0.0),
     stats,
