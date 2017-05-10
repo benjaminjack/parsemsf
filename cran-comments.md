@@ -5,7 +5,7 @@
 ## R CMD check results
 There were no ERRORs or WARNINGs. 
 
-There was 1 NOTE:
+There were 2 NOTEs:
 ```
 Possibly mis-spelled words in DESCRIPTION:
   MSF (2:27, 5:58)
@@ -15,7 +15,11 @@ Possibly mis-spelled words in DESCRIPTION:
   peptides (5:261)
 ```
 These spellings are correct.
-
+```
+Suggests or Enhances not in mainstream repositories:
+  dbplyr
+```
+dbplyr is a dependency for an upcoming release of dplyr. dbplyr will need to be installed when the new version of dplyr is released, but it is not required under the current version of dplyr.
 
 ## Downstream dependencies
 There are no downstream dependencies.
