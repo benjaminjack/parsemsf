@@ -9,7 +9,7 @@ map_peptides(msf_file, min_conf = "High", prot_regex = "")
 \arguments{
 \item{msf_file}{A file path to a ThermoFisher MSF file.}
 
-\item{min_conf}{"High", "Medium", or "Low". The mininum peptide confidence level to retrieve from MSF file.}
+\item{min_conf}{"High", "Medium", or "Low". The minimum peptide confidence level to retrieve from MSF file.}
 
 \item{prot_regex}{Regular expression where the first group matches a protein name or ID from the protein description. Regex must contain ONE group. The protein description is typically generated from a fasta reference file that was used for the database search.}
 }
