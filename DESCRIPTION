@@ -12,13 +12,15 @@ LazyData: true
 RoxygenNote: 6.0.1
 Imports:
     dplyr (>= 0.5.0),
-    dbplyr,
+    DBI,
     lazyeval,
     RSQLite (>= 1.0.0),
     stats,
     stringr (>= 1.1.0),
     tidyr (>= 0.6.0)
-Suggests: testthat (>= 1.0.2),
+Suggests: 
+    dbplyr,
+    testthat (>= 1.0.2),
     knitr,
     rmarkdown,
     ggplot2

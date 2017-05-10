@@ -48,7 +48,11 @@ make_pep_table <- function(msf_file,
   }
 
   # Access MSF database file
-  my_db <- src_sqlite(msf_file)
+  if (utils::packageVersion("dplyr") > "0.5.0") {
+    my_db <- DBI::dbConnect(RSQLite::SQLite(), msf_file)
+  } else {
+    my_db <- dplyr::src_sqlite(msf_file)
+  }
 
   # First check file version (only Proteome Discoverer 1.4.x is supported)
   schema <- tbl(my_db, "SchemaInfo") %>%
