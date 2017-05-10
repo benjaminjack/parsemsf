@@ -8,7 +8,7 @@ make_area_table(msf_file, min_conf = "High",
   prot_regex = "^>([a-zA-Z0-9._]+)\\\\b", collapse = TRUE)
 }
 \arguments{
-\item{msf_file}{A file path to a Thermo MSF file.}
+\item{msf_file}{A file path to a ThermoFisher MSF file.}
 
 \item{min_conf}{"High", "Medium", or "Low". The mininum peptide confidence level to retrieve from MSF file.}
 

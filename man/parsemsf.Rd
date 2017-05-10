@@ -4,7 +4,7 @@
 \name{parsemsf}
 \alias{parsemsf}
 \alias{parsemsf-package}
-\title{parsemsf: Parse Thermo MSF files and estimate protein abundances.}
+\title{parsemsf: Parse ThermoFisher MSF files and estimate protein abundances.}
 \description{
-parsemsf: Parse Thermo MSF files and estimate protein abundances.
+parsemsf: Parse ThermoFisher MSF files and estimate protein abundances.
 }

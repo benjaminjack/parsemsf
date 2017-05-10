@@ -8,7 +8,7 @@ make_pep_table(msf_file, min_conf = "High",
   prot_regex = "^>([a-zA-Z0-9._]+)\\\\b", collapse = TRUE)
 }
 \arguments{
-\item{msf_file}{A file path to a Thermo MSF file.}
+\item{msf_file}{A file path to a ThermoFisher MSF file.}
 
 \item{min_conf}{"High", "Medium", or "Low". The mininum peptide confidence level to retrieve from MSF file.}
 
@@ -17,7 +17,7 @@ make_pep_table(msf_file, min_conf = "High",
 \item{collapse}{If TRUE, peptides that match to multiple protein sequences are collapsed into a single row with multiple protein descriptions and protein IDs in the \code{Proteins} and \code{ProteinID} columns separated by semi-colons (";").}
 }
 \value{
-A data frame of all peptides above the confidence cut-off from a thermo MSF file.
+A data frame of all peptides above the confidence cut-off from a ThermoFisher MSF file.
 
 \item{peptide_id}{a unique peptide ID}
 \item{spectrum_id}{a unique spectrum ID}

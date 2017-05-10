@@ -1,7 +1,7 @@
 
 #' Map peptides to their locations within a protein
 #'
-#' Takes a Thermo MSF file and finds the location of each peptide within its corresponding protein sequence. In cases where a single peptide maps to multiple locations within a protein sequence, only the first location is reported.
+#' Takes a ThermoFisher MSF file and finds the location of each peptide within its corresponding protein sequence. In cases where a single peptide maps to multiple locations within a protein sequence, only the first location is reported.
 #'
 #' @inheritParams make_pep_table
 #'

@@ -1,4 +1,4 @@
-#' parsemsf: Parse Thermo MSF files and estimate protein abundances.
+#' parsemsf: Parse ThermoFisher MSF files and estimate protein abundances.
 #'
 #' @docType package
 #' @name parsemsf
