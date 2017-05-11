@@ -28,7 +28,7 @@ A dataframe containing start and stop positions (relative to the parent protein 
 \item{end}{end position of peptide within protein sequence}
 }
 \description{
-Takes a ThermoFisher MSF file and finds the location of each peptide within its corresponding protein sequence. In cases where a single peptide maps to multiple locations within a protein sequence, only the first location is reported.
+Takes a ThermoFisher MSF file and finds the location of each peptide within its corresponding protein sequence. In cases where a single peptide maps to multiple locations within a protein sequence, only the first location is reported. If a peptide maps ambiguously to multiple proteins, all locations are reported with data from each peptide-protein combination on a separate row.
 }
 \examples{
 map_peptides(parsemsf_example("test_db.msf"))

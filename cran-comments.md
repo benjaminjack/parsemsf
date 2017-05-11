@@ -1,3 +1,8 @@
+## Resubmission
+This is a resubmission. In this version I have:
+
+* Added the dbplyr github repository under DESCRIPTION Additional_repositories.
+
 ## Test environments
 * local macOS install x86_64-apple-darwin16.5.0, R 3.4.0
 * R-devel and R 3.4.0 on win-builder (via `devtools::build_win()`)
@@ -19,7 +24,7 @@ These spellings are correct.
 Suggests or Enhances not in mainstream repositories:
   dbplyr
 ```
-dbplyr is a dependency for an upcoming release of dplyr. dbplyr will need to be installed when the new version of dplyr is released, but it is not required under the current version of dplyr.
+dbplyr is a dependency for an upcoming release of dplyr. dbplyr will need to be installed when the new version of dplyr is released, but it is not required under the current version of dplyr. I have added the github repository for dbplyr under 'Additional_repositories'.
 
 ## Downstream dependencies
 There are no downstream dependencies.
