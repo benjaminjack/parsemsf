@@ -1,7 +1,5 @@
 ## Resubmission
-This is a resubmission. In this version I have:
-
-* Added the dbplyr github repository under DESCRIPTION Additional_repositories.
+This is a resubmission. In this version have...
 
 ## Test environments
 * local macOS install x86_64-apple-darwin16.5.0, R 3.4.0

@@ -24,6 +24,5 @@ Suggests:
     knitr,
     rmarkdown,
     ggplot2
-Additional_repositories: https://github.com/tidyverse/dbplyr
 VignetteBuilder: knitr
 BugReports: https://github.com/benjaminjack/parsemsf/issues
