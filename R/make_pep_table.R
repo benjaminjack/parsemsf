@@ -48,7 +48,8 @@ make_pep_table <- function(msf_file,
   }
 
   # Access MSF database file
-  my_db <- dplyr::src_sqlite(msf_file)
+  # my_db <- dplyr::src_sqlite(msf_file)
+  my_db <- DBI::dbConnect(RSQLite::SQLite(), msf_file)
 
   # First check file version (only Proteome Discoverer 1.4.x is supported)
   schema <- tbl(my_db, "SchemaInfo") %>%
@@ -123,6 +124,8 @@ make_pep_table <- function(msf_file,
 
   # Rename columns for a more consistent column name style
   pep_table <- select_(pep_table, .dots = setNames(old_names, new_names))
+
+  DBI::dbDisconnect(my_db)
 
   return(pep_table)
 

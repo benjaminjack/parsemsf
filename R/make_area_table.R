@@ -26,7 +26,8 @@
 make_area_table <- function(msf_file, min_conf = "High", prot_regex = "^>([a-zA-Z0-9._]+)\\b", collapse = TRUE) {
 
   # Access MSF database file
-  my_db <- src_sqlite(msf_file)
+  # my_db <- src_sqlite(msf_file)
+  my_db <- DBI::dbConnect(RSQLite::SQLite(), msf_file)
 
   Events <- tbl(my_db, "Events") %>%
     select_(~-RT, ~-LeftRT, ~-RightRT, ~-SN, ~-FileID, ~-Intensity)
@@ -92,6 +93,8 @@ make_area_table <- function(msf_file, min_conf = "High", prot_regex = "^>([a-zA-
   # Join peptide info to mass/area/charge/etc.
   auc_table <- right_join(spectra, pep_table, by=c("SpectrumID" = "spectrum_id")) %>%
     select_(.dots = setNames(old_names, new_names))
+
+  DBI::dbDisconnect(my_db)
 
   return(auc_table)
 

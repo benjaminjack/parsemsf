@@ -2,7 +2,9 @@
 title: "Introduction to ParseMSF"
 author: "Benjamin R. Jack"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    smart: false
 vignette: >
   %\VignetteIndexEntry{Introduction to ParseMSF}
   %\VignetteEngine{knitr::rmarkdown}
