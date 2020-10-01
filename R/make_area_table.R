@@ -28,35 +28,39 @@ make_area_table <- function(msf_file, min_conf = "High", prot_regex = "^>([a-zA-
   # Access MSF database file
   # my_db <- src_sqlite(msf_file)
   my_db <- DBI::dbConnect(RSQLite::SQLite(), msf_file)
+  on.exit(DBI::dbDisconnect(my_db))
 
   Events <- tbl(my_db, "Events") %>%
-    select_(~-RT, ~-LeftRT, ~-RightRT, ~-SN, ~-FileID, ~-Intensity)
+    select(-"RT", -"LeftRT", -"RightRT", -"SN", -"FileID", -"Intensity")
 
   EventAreaAnnotations <- tbl(my_db, "EventAreaAnnotations") %>%
-    select_(~EventID, ~QuanResultID)
+    select("EventID", "QuanResultID")
 
   PrecursorIonAreaSearchSpectra <- tbl(my_db, "PrecursorIonAreaSearchSpectra")
 
   # Here is where all the scan information, including mass and charge
   SpectrumHeaders <- tbl(my_db, "SpectrumHeaders") %>%
-    select_(~SpectrumID, ~FirstScan, ~Mass, ~Charge, ~RetentionTime, ~UniqueSpectrumID) %>%
+    select("SpectrumID", "FirstScan", "Mass", "Charge", "RetentionTime", "UniqueSpectrumID") %>%
     collect(n = Inf)
 
   # Grab intensities
   MassPeaks <- tbl(my_db, "MassPeaks") %>%
-    select_(~MassPeakID, ~Intensity) %>%
+    select("MassPeakID", "Intensity") %>%
     collect(n = Inf)
 
   # Here are all the areas
   # m/z is really just one of many m/z's that could be retrieved from the msf file.
   # All of the m/z's are calculated slightly differently. I just picked one since
   # I don't use m/z's for my work.
-  events_joined <- inner_join(Events, EventAreaAnnotations, by = "EventID") %>%
+  events_joined <- Events %>%
+    inner_join(EventAreaAnnotations, by = "EventID") %>%
     inner_join(PrecursorIonAreaSearchSpectra, by = "QuanResultID") %>%
     collect(n = Inf)  %>%
-    group_by_(~SearchSpectrumID) %>%
-    summarize_(.dots = setNames(list(~sum(Area), ~mean(Mass)),
-                               c("Area", "m_z")))
+    group_by(.data$SearchSpectrumID) %>%
+    summarize(
+      Area = sum(.data$Area),
+      m_z = mean(.data$Mass)
+    )
 
   # NOTE: mass and m/z are probably not correct right now! I have check them in more detail
 
@@ -68,34 +72,22 @@ make_area_table <- function(msf_file, min_conf = "High", prot_regex = "^>([a-zA-
 
   pep_table <- make_pep_table(msf_file, min_conf, prot_regex, collapse)
 
-  # Rename columns for more consistent column naming
-  old_names <- list(~peptide_id,
-                    ~SpectrumID,
-                    ~protein_desc,
-                    ~sequence,
-                    ~Area,
-                    ~Mass,
-                    ~m_z,
-                    ~Charge,
-                    ~Intensity,
-                    ~FirstScan)
-  new_names <- c("peptide_id",
-                 "spectrum_id",
-                 "protein_desc",
-                 "sequence",
-                 "area",
-                 "mass",
-                 "m_z",
-                 "charge",
-                 "intensity",
-                 "first_scan")
-
-  # Join peptide info to mass/area/charge/etc.
-  auc_table <- right_join(spectra, pep_table, by=c("SpectrumID" = "spectrum_id")) %>%
-    select_(.dots = setNames(old_names, new_names))
-
-  DBI::dbDisconnect(my_db)
+  auc_table <- spectra %>%
+    # Join peptide info to mass/area/charge/etc.
+    right_join(pep_table, by = c("SpectrumID" = "spectrum_id")) %>%
+    # Rename columns for more consistent column naming
+    select(
+      "peptide_id" = "peptide_id",
+      "spectrum_id" = "SpectrumID",
+      "protein_desc" = "protein_desc",
+      "sequence" = "sequence",
+      "area" = "Area",
+      "mass" = "Mass",
+      "m_z" = "m_z",
+      "charge" = "Charge",
+      "intensity" = "Intensity",
+      "first_scan" = "FirstScan"
+    )
 
   return(auc_table)
-
 }

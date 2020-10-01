@@ -25,21 +25,23 @@
 map_peptides <- function(msf_file, min_conf = "High", prot_regex = "") {
 
   pep_table <- make_pep_table(msf_file, min_conf, collapse = FALSE) %>%
-    rename_(.dots = setNames(list(~sequence), c("peptide_sequence")))
+    rename(peptide_sequence = "sequence")
 
   my_db <- DBI::dbConnect(RSQLite::SQLite(), msf_file)
 
   prots <- tbl(my_db, "Proteins") %>%
-    select_(~ProteinID, ~Sequence) %>%
+    select(.data$ProteinID, .data$Sequence) %>%
     collect()
 
-  pep_table <- inner_join(pep_table, prots, by = c("protein_id" = "ProteinID")) %>%
-    rename_(.dots = setNames(list(~Sequence), c("protein_sequence"))) %>%
+  pep_table <- pep_table %>%
+    inner_join(prots, by = c("protein_id" = "ProteinID")) %>%
+    rename(protein_sequence = "Sequence") %>%
     rowwise() %>%
-    mutate_(.dots = setNames(list(~str_locate(protein_sequence, peptide_sequence)[1],
-                                  ~str_locate(protein_sequence, peptide_sequence)[2]),
-                             c("start",
-                               "end")))
+    mutate(
+      start = str_locate(.data$protein_sequence, .data$peptide_sequence)[1],
+      end = str_locate(.data$protein_sequence, .data$peptide_sequence)[2]
+    )
+
   DBI::dbDisconnect(my_db)
 
   return(pep_table)
